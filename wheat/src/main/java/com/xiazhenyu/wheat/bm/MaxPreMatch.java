@@ -1,4 +1,4 @@
-package com.xiazhenyu.wheat.BM;
+package com.xiazhenyu.wheat.bm;
 
 import java.util.Arrays;
 
