@@ -2,7 +2,7 @@ package com.xiazhenyu.wheat.bm;
 
 /**
  * @Author xiazhenyu
- * @Description
+ * @Description 将一个字符串中的空格替换成"%20"
  * @Date 11:41 下午 2021/5/4
  **/
 public class ReplaceSpace {

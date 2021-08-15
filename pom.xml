@@ -12,10 +12,43 @@
     <modules>
         <module>wheat</module>
         <module>rice</module>
+        <module>soybean(SPI)</module>
+        <module>corn</module>
+        <module>cucumber</module>
     </modules>
+    <dependencyManagement>
+        <dependencies>
+            <!-- pulsar -->
+            <dependency>
+                <groupId>com.ypsx.pulsar</groupId>
+                <artifactId>pulsar-ypsx-spring-boot-starter</artifactId>
+                <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.0.1-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.20</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.3.0-alpha9</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
 </project>

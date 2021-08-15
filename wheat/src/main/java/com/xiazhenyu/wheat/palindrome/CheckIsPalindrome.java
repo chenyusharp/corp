@@ -2,7 +2,7 @@ package com.xiazhenyu.wheat.palindrome;
 
 /**
  * @Author xiazhenyu
- * @Description
+ * @Description 验证一个字符串是否是回文字符串
  * @Date 4:36 下午 2021/5/5
  **/
 public class CheckIsPalindrome {
