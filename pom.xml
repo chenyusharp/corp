@@ -15,6 +15,7 @@
         <module>soybean(SPI)</module>
         <module>corn</module>
         <module>cucumber</module>
+        <module>peanut</module>
     </modules>
     <dependencyManagement>
         <dependencies>
