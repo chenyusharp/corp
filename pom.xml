@@ -16,6 +16,8 @@
         <module>corn</module>
         <module>cucumber</module>
         <module>peanut</module>
+        <module>ostrich</module>
+        <module>Potato</module>
     </modules>
     <dependencyManagement>
         <dependencies>
