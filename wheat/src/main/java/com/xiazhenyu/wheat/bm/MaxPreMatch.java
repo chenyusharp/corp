@@ -63,9 +63,13 @@ public class MaxPreMatch {
 
 
     public static void main(String[] args) {
-        String[] strs = {"customer", "cuar", "cuat"};
+        /**String[] strs = {"customer", "cuar", "cuat"};
 
-        System.out.println(MaxPreMatch.replaceSpace(strs));
+         System.out.println(MaxPreMatch.replaceSpace(strs));
+         **/
+        String[] stringArray = new String[]{"xiazhenyu", "xiaoming", "xisan", "xiyang"};
+        System.out.println(replaceSpace(stringArray));
+
     }
 
 }

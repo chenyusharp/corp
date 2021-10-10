@@ -26,6 +26,7 @@ public class ReplaceSpace {
 
 
     public static String replaceSpace2(StringBuffer str) {
+//        str.toString().replaceAll("\\s","$20");
         return str.toString().replaceAll("\\s", "%20");
     }
 
