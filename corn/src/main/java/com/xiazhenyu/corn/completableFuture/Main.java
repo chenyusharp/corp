@@ -1,6 +1,10 @@
 package com.xiazhenyu.corn.completableFuture;
 
+import com.google.common.collect.Maps;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -31,14 +35,18 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
-        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(Main::getMoreData);
+        /**CompletableFuture<Integer> future = CompletableFuture.supplyAsync(Main::getMoreData);
 
-        Future<Integer> f = future.whenComplete((v, e) -> {
-            System.out.println(v);
-            System.out.println(e);
-        });
-        System.out.println(f.get());
-//        System.in.read();
+         Future<Integer> f = future.whenComplete((v, e) -> {
+         System.out.println(v);
+         System.out.println(e);
+         });
+         System.out.println(f.get());
+         //        System.in.read();
+         **/
+        Map<String, Object> oMap = new HashMap<>();
+        oMap.put("name", "xiazhenyu");
+        HashMap<String, Object> os = Optional.ofNullable(oMap).map(Maps::newHashMap).orElse(Maps.newHashMap());
 
     }
 
