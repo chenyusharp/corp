@@ -19,12 +19,17 @@ public class CommonTest {
         System.out.println(A.a);
         System.out.println(A.b);
 
+        final int MAXIMUM_CAPACITY = 1 << 30;
+        System.out.println(MAXIMUM_CAPACITY);
+
+        final String name="xiazhenyu";
+        System.out.println(name);
 
 
     }
 
 
-    public  static  class A {
+    public static class A {
 
         static int a = 0;
 
@@ -32,7 +37,8 @@ public class CommonTest {
             a = 1;
             b = 1;
         }
-        static int b=0;
+
+        static int b = 0;
     }
 
 
