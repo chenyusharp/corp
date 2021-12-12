@@ -18,6 +18,8 @@
         <module>peanut</module>
         <module>ostrich</module>
         <module>Potato</module>
+        <module>sesame</module>
+        <module>Sesame</module>
     </modules>
     <properties>
         <spring.boot.version>2.1.3.RELEASE</spring.boot.version>

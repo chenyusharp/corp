@@ -11,11 +11,22 @@ public class Main {
 
 
     public static void main(String[] args) {
-        MyQueue myQueue = new MyQueue();
-        ProducerThread producerThread = new ProducerThread(myQueue);
-        ConsumerThread consumerThread = new ConsumerThread(myQueue);
-        producerThread.start();
-        consumerThread.start();
-    }
+//        MyQueue myQueue = new MyQueue();
+//        ProducerThread producerThread = new ProducerThread(myQueue);
+//        ConsumerThread consumerThread = new ConsumerThread(myQueue);
+//        producerThread.start();
+//        consumerThread.start();
 
+//        MyThread myThread=new MyThread();
+//        myThread.start();
+
+        MyDaemonThread myDaemonThread = new MyDaemonThread();
+        myDaemonThread.setDaemon(true);
+
+        myDaemonThread.start();
+
+        new MyNotDaemonThread().start();
+
+
+    }
 }
