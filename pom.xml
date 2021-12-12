@@ -18,7 +18,6 @@
         <module>peanut</module>
         <module>ostrich</module>
         <module>Potato</module>
-        <module>sesame</module>
         <module>Sesame</module>
     </modules>
     <properties>
