@@ -5,7 +5,7 @@ import org.openjdk.jol.info.ClassLayout;
 /**
  * Date: 2021/12/12
  * <p>
- * Description:
+ * Description: 对象结构查看
  *
  * @author xiazhenyu
  */

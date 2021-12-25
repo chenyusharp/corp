@@ -1,6 +1,5 @@
 package com.xiazhenyu.sesame;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
 /**
  * Date: 2021/12/14
