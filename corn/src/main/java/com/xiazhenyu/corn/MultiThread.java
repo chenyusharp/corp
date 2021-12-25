@@ -1,10 +1,9 @@
 package com.xiazhenyu.corn;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Date: 2021/10/28
+ * Date: 2021/12/18
  * <p>
  * Description:
  *
@@ -13,44 +12,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MultiThread {
 
 
+    public static void main(String[] args) throws InterruptedException {
 
-    public static void main(String[] args) throws Exception {
-        Object lock = new Object();
-        AtomicBoolean a = new AtomicBoolean(false);
-        AtomicBoolean b = new AtomicBoolean(false);
-        Thread ta = new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            synchronized (lock) {
-                a.set(true);
-                lock.notifyAll();
-            }
-        }, "A");
-        Thread tb = new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            synchronized (lock) {
-                b.set(true);
-                lock.notifyAll();
-            }
-        }, "B");
-        ta.start();
-        tb.start();
-        synchronized (lock) {
-            lock.wait();
+        final ReentrantLock putLock = new ReentrantLock();
+
+        int c = 100;
+        putLock.lockInterruptibly();
+        try {
+            c += 100;
+            System.out.println(c);
+        } catch (Exception e) {
+
+        } finally {
+            putLock.unlock();
         }
-        if (a.get()) {
-            System.out.println("A ok");
-        }
-        if (b.get()) {
-            System.out.println("B ok");
-        }
+
+
     }
+
 
 }
