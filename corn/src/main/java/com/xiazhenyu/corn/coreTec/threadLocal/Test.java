@@ -16,6 +16,7 @@ public class Test {
 
             for (int i = 0; i < 10; i++) {
                 if (getInstance().get() == null) {
+                    //threadLocal不能实现值继承。main线程中放入的值不能传递给ThreadA中。
                     getInstance().set("main thead set this value");
                 }
                 System.out.println("get value  from main,value=" + getInstance().get());
