@@ -13,6 +13,7 @@ public enum MyObject {
 
     userInfoFactory;
 
+    //更多的时候，这个地方会去初始化一些数据库链接之类的。
     private UserInfo userInfo;
 
 
