@@ -19,6 +19,7 @@ public class MyService {
     public void testMethod() {
         lock.lock();
         try {
+            Thread.sleep(20000);
             for (int i = 0; i < 10; i++) {
                 System.out.println("ThreadName=" + Thread.currentThread().getName() + " " + (i + 1));
             }
