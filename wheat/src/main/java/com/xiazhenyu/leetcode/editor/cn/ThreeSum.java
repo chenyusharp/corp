@@ -46,6 +46,7 @@ public class ThreeSum {
 
     public static void main(String[] args) {
         Solution solution = new ThreeSum().new Solution();
+        System.out.println(solution.threeSum(new int[]{-2,0,3,-1,4,0,3,4,1,1,1,-3,-5,4,0}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
@@ -55,11 +56,37 @@ public class ThreeSum {
             int n = nums.length;
             Arrays.sort(nums);
             List<List<Integer>> ans = new ArrayList<>();
-            for (int first = 0; first < n; ++first) {
+            for (int i = 0; i < n; i++) {
+                if (nums[i] > 0) {
+                    return ans;
+                }
+                if (i > 0 && nums[i] == nums[i -1]) {
+                    continue;
+                }
 
+                int L = i + 1, R = n - 1;
+                while (L < R) {
+                    int sum = nums[i] + nums[L] + nums[R];
+                    if (sum == 0) {
+                        ans.add(Arrays.asList(nums[i], nums[L], nums[R]));
+                        while (L < R && nums[L] == nums[L + 1]) {
+                            L++;
+                        }
+
+                        while (L < R && nums[R - 1] == nums[R]) {
+                            R--;
+                        }
+                        L++;
+                        R--;
+                    } else if (sum > 0) {
+                        R--;
+                    } else {
+                        L++;
+                    }
+                }
             }
 
-            return null;
+            return ans;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
