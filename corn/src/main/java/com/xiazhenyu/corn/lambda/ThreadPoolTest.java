@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @author xiazhenyu
  */
 @SuppressWarnings("AlibabaThreadPoolCreation")
-public class Test {
+public class ThreadPoolTest {
 
     public static void main(String[] args) {
         /**int a=10;

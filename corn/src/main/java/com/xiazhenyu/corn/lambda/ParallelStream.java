@@ -2,6 +2,7 @@ package com.xiazhenyu.corn.lambda;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,17 +18,28 @@ public class ParallelStream {
 
     public static void main(String[] args) {
 
-        Stream<String> stream = Stream.of("How", "do", "you", "do");
-        List<String> var0=stream.parallel().collect(ArrayList::new,ArrayList::add,(t,u)->{
+        Supplier<Stream<String>> supplier = () -> Stream.of("How", "do", "you", "do");
+        List<String> var0 = supplier.get().parallel().collect(ArrayList::new, ArrayList::add, (t, u) -> {
             System.out.println("t:" + t + " u:" + u);
             t.addAll(u);
         });
         System.out.println(var0);
-        List<String> list = stream.collect(ArrayList::new, ArrayList::add, (t, u) -> {
+        List<String> list = supplier.get().collect(ArrayList::new, ArrayList::add, (t, u) -> {
             System.out.println("t:" + t + " u:" + u);
             t.addAll(u);
         });
         System.out.println(list);
+
+        List<String> createStream = new ArrayList<>();
+        createStream.add("xia");
+        createStream.add("zhen");
+        createStream.add("yu");
+        Stream<String> stringStream = Stream.of(createStream.toArray(new String[createStream.size()]));
+
+        List<String> result=stringStream.collect(ArrayList::new,ArrayList::add,(t,u)->{
+           t.addAll(u);
+        });
+        System.out.println(result);
 
 
     }
