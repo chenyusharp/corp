@@ -28,7 +28,6 @@ public class ParallelStream {
             System.out.println("t:" + t + " u:" + u);
             t.addAll(u);
         });
-        System.out.println(list);
 
         List<String> createStream = new ArrayList<>();
         createStream.add("xia");
@@ -36,11 +35,19 @@ public class ParallelStream {
         createStream.add("yu");
         Stream<String> stringStream = Stream.of(createStream.toArray(new String[createStream.size()]));
 
-        List<String> result=stringStream.collect(ArrayList::new,ArrayList::add,(t,u)->{
-           t.addAll(u);
+        List<String> result = stringStream.collect(ArrayList::new, ArrayList::add, (t, u) -> {
+            t.addAll(u);
         });
         System.out.println(result);
+    }
 
+
+    public static void handler(Stream<String> supplier) {
+        List<String> list = supplier.collect(ArrayList::new, ArrayList::add, (t, u) -> {
+            System.out.println("t:" + t + " u:" + u);
+            t.addAll(u);
+        });
+        System.out.println(list);
 
     }
 
