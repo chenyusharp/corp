@@ -1,0 +1,74 @@
+# [30. 串联所有单词的子串](https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/)
+
+***
+
+### 思路
+
+1. 总共用到两个哈希表，allWords 用于记录words中单词出现的次数，subWords 用于记录子串中（也就是滑动窗口中）单词出现的次数
+2. wordNum 为单词的个数，wordLen为单词长度
+3. 遍历字符串，移动长度为 wordNum * wordLen 的滑动窗口，再在当前滑动窗口中依次比较wordLen长度的单词
+4. 当这个窗口内一旦出现不存在allWords中的单词，或者这个单词在子串中出现的次数已经等于allWords中的次数`(也就是再加入这个子串次数就要超出了)`，这个滑动窗口就不符合要求，直接break进入下一个滑动窗口的匹配
+5. 一旦完全匹配上了，把滑动窗口的起始索引加入结果res中
+
+> 还可以进一步优化，比如滑动窗口的每次移动可以移动一个单词长度而不是一个个字符移动，字符串匹配时第二个哈希表只移除第一个单词而不是完全置空等。可以参考这篇[题解](https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-6/)的解法二，太麻烦了，我放弃了。
+
+### 代码
+
+* []
+
+```python3
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        allWords = collections.Counter(words)
+        wordNum = len(words)
+        wordLen = len(words[0])
+        res = []
+        for i in range(len(s) - wordNum * wordLen + 1):
+            subWords = collections.defaultdict(int)
+            index = i
+            while index < i + wordNum * wordLen:
+                curWord = s[index: index + wordLen]
+                if curWord not in allWords or subWords[curWord] == allWords[curWord]:
+                    break
+                subWords[curWord] += 1
+                index += wordLen
+            if index == i + wordNum * wordLen:
+                res.append(i)
+        return res
+```
+
+* []
+
+```java
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        Map<String, Integer> allWords = new HashMap<>();
+        for(String word : words){
+            allWords.put(word, allWords.getOrDefault(word, 0) + 1);
+        }
+        int wordNum = words.length, wordLen = words[0].length();
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < s.length() - wordNum * wordLen + 1; i++){
+            Map<String, Integer> subWords = new HashMap<>();
+            int index = i;
+            while(index < i + wordNum * wordLen){
+                String curWord = s.substring(index, index + wordLen);
+                if(!allWords.containsKey(curWord) || subWords.get(curWord) == allWords.get(curWord)){
+                    break;
+                }
+                subWords.put(curWord, subWords.getOrDefault(curWord, 0) + 1);
+                index += wordLen;
+            }
+            if(index == i + wordNum * wordLen){
+                res.add(i);
+            }
+        }
+        return res;
+    }
+}
+```
+
+**复杂度分析**
+- 时间复杂度：$O(n * m)$，$n$为字符串长度，$m$为单词个数
+- 空间复杂度：$O(m)$
+
