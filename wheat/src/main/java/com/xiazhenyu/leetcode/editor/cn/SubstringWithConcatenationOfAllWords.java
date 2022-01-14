@@ -51,8 +51,9 @@ import java.util.Map;
 public class SubstringWithConcatenationOfAllWords {
 
     public static void main(String[] args) {
-        Solution solution = new SubstringWithConcatenationOfAllWords().new Solution();
-        solution.findSubstring("barfoothefoobarman", new String[]{"foo", "bar"});
+//        Solution solution = new SubstringWithConcatenationOfAllWords().new Solution();
+//        solution.findSubstring("barfoothefoobarman", new String[]{"foo", "bar"});
+        System.out.println(3/2);
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
