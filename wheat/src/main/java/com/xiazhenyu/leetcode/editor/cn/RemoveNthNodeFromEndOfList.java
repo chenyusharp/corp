@@ -41,9 +41,6 @@
 
 package com.xiazhenyu.leetcode.editor.cn;
 
-import java.util.List;
-import javax.xml.soap.Node;
-
 public class RemoveNthNodeFromEndOfList {
 
     public static void main(String[] args) {
