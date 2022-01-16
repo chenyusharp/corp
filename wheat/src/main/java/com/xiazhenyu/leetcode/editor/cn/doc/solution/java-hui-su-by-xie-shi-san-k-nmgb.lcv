@@ -1,0 +1,40 @@
+### 解题思路
+
+分别根据当前位置的数是几来进行回溯构造字母组合，按键中的值先存在数组中方便取值。
+使用到的数据结构的解释如下：
+`ans` 存储结果的列表
+`phone` 存储电话按键对应位置的字母String数组，因为数组索引的原因，为了**方便根据索引取值**，直接将0和1位置的元素置为空串。
+其中需要注意的一点是，因为可能digits中会**取相同的数字**，所以不能使用visit数组来标记访问过的字母。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    List<String> ans = new ArrayList<>();
+    String[] phone = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    public List<String> letterCombinations(String digits) {
+        if("".equals(digits)) return ans;
+        dfs(digits, 0, new StringBuilder());
+        return ans;
+    }
+    public void dfs(String digits, int start, StringBuilder sb){
+        if(start == digits.length()){
+            ans.add(new String(sb));
+            return;
+        }
+        // 取出当前数字
+        int curIdx = digits.charAt(start) - '0';
+        // 当前数字对应的电话按键
+        String curPhoneNum = phone[curIdx];
+        // 回溯
+        for(int i = 0; i < curPhoneNum.length(); i++){
+            sb.append(curPhoneNum.charAt(i));
+            dfs(digits, start + 1, sb);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+}
+```
+

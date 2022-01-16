@@ -1,0 +1,56 @@
+### 解题思路
+
+![LVHB6(905VDT%~_20J%NPCV.png](https://pic.leetcode-cn.com/1639738429-iZjVta-LVHB6(905VDT%25~_20J%25NPCV.png)
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> q = new ArrayList<List<Integer>>();
+        int len = nums.length;
+        if (nums == null || len < 4) return q;
+        // 排序
+        Arrays.sort(nums);
+        for (int i = 0; i < len - 3; i++) {
+            // 去重
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            // 如果这四数之和大于target, 往后算也必大于target
+            if ((long)nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) break;
+            // 下面这四数之和小于target, 则nums[i]小了
+            if ((long)nums[i] + nums[len - 3] + nums[len - 2] + nums[len -1] < target)  continue;
+            for (int j = i + 1; j < len - 2; j++) {
+                // 去重
+                if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+                // 如果这四数之和大于target, 往后算也必大于target
+                if ((long)nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) break;
+                // 如果这四数之和大于target, 往后算也必大于target
+                if ((long)nums[i] + nums[j] + nums[len - 2] + nums[len - 1] < target) continue;
+                // 接下来就是熟悉的双指针算法啦
+                int L = j + 1;
+                int R = len - 1;
+                while (L < R) {
+                    int sum = nums[i] + nums[j] + nums[L] + nums[R];
+                    if (sum == target) {
+                        q.add(Arrays.asList(nums[i], nums[j], nums[L], nums[R]));
+                        while (L < R && nums[L] == nums[L + 1]) L++;
+                        while (L < R && nums[R] == nums[R - 1]) R--;
+                        L++;
+                        R--;
+                    } else if (sum < target) {
+                        // 小了就往右移
+                        L++;
+                    } else {
+                        // 大了就往左移
+                        R--;
+                    }
+                }
+            }
+        }
+        return q;
+    }
+}
+```
+
