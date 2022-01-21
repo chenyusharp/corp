@@ -51,7 +51,7 @@
 // 1 <= s.length <= 10⁴ 
 // s 仅由括号 '()[]{}' 组成 
 // 
-// Related Topics 栈 字符串 👍 2912 👎 0
+// Related Topics 栈 字符串 👍 2914 👎 0
 
 package com.xiazhenyu.leetcode.editor.cn;
 
@@ -64,35 +64,12 @@ public class ValidParentheses {
 
     public static void main(String[] args) {
         Solution solution = new ValidParentheses().new Solution();
-//        System.out.println(solution.isValid("()"));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
 
         public boolean isValid(String s) {
-            /*Stack ascStack = new Stack();
-            Stack descStack = new Stack();
-            for (int i = 0; i < s.length(); i++) {
-                ascStack.push(s.charAt(i));
-            }
-            for (int i = s.length() - 1; i >= 0; i--) {
-                descStack.push(s.charAt(i));
-            }
-            boolean ans = true;
-
-            for (int i = 0; i < ascStack.size(); i++) {
-//                if (!ascStack.pop().equals(descStack.pop())) {
-//                    ans = false;
-//                    break;
-//                }
-                if (!ascStack.elementAt(i).equals(descStack.elementAt(ascStack.size() - 1 - i))) {
-                    ans = false;
-                    break;
-                }
-            }
-            return ans;*/
-
             int n = s.length();
             if (n % 2 == 1) {
                 return false;
@@ -101,10 +78,11 @@ public class ValidParentheses {
                 private static final long serialVersionUID = 334794947120797352L;
 
                 {
-                put(')', '(');
-                put(']', '[');
-                put('}', '{');
-            }};
+                    put(')', '(');
+                    put(']', '[');
+                    put('}', '{');
+                }
+            };
             Deque<Character> stack = new LinkedList<>();
 
             for (int i = 0; i < n; i++) {
@@ -121,4 +99,6 @@ public class ValidParentheses {
             return stack.isEmpty();
         }
     }
+//leetcode submit region end(Prohibit modification and deletion)
+
 }
