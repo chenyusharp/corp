@@ -15,9 +15,36 @@ public class MyTest {
     int a = 0;
     boolean flag;
 
+    public static class Student {
+
+        private int age;
+        private String name;
+
+        public Student(int age, String name) {
+            this.age = age;
+            this.name = name;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
 
     public static void main(String[] args) {
-        MyTest myTest = new MyTest();
+        /*MyTest myTest = new MyTest();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -32,7 +59,29 @@ public class MyTest {
             }
         }).start();
 
-        System.out.println("this is end");
+        System.out.println("this is end");*/
+
+        int a = 10;
+        int b = 100;
+        int c = 30;
+        a = b;
+        b = c;
+//        System.out.println(a);
+//        System.out.println(b);
+//        System.out.println(c);
+
+        Student A = new Student(10, "jack");
+
+        Student B = new Student(20, "lily");
+
+        Student C = new Student(40, "had");
+
+        A = B;
+        B = C;
+        System.out.println(A.getAge());
+        System.out.println(B.getAge());
+        System.out.println(C.getAge());
+
     }
 
 

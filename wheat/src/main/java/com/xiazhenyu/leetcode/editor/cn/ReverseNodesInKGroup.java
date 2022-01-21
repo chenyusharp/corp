@@ -1,4 +1,4 @@
-  //给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。 
+//给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
 //
 // k 是一个正整数，它的值小于或等于链表的长度。 
 //
@@ -52,31 +52,67 @@
 // 0 <= Node.val <= 1000 
 // 1 <= k <= sz 
 // 
-// Related Topics 递归 链表 👍 1442 👎 0
+// Related Topics 递归 链表 👍 1443 👎 0
 
-  package com.xiazhenyu.leetcode.editor.cn;
-  public class ReverseNodesInKGroup{
-      public static void main(String[] args) {
-           Solution solution = new ReverseNodesInKGroup().new Solution();
-      }
-      //leetcode submit region begin(Prohibit modification and deletion)
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
-class Solution {
-    public ListNode reversezKGroup(ListNode head, int k) {
+package com.xiazhenyu.leetcode.editor.cn;
 
-        return null;
+public class ReverseNodesInKGroup {
 
+    public static void main(String[] args) {
+        Solution solution = new ReverseNodesInKGroup().new Solution();
+
+        /*ListNode head = new ListNode(1);
+        ListNode node_2 = new ListNode(2, null);
+        head.next = node_2;
+        ListNode node_3 = new ListNode(3, null);
+        node_2.next = node_3;
+        ListNode node_4 = new ListNode(4, null);
+        node_3.next = node_4;
+        ListNode node_5 = new ListNode(5, null);
+        node_4.next = node_5;
+        ListNode result = solution.reversezKGroup(head, 2);
+        System.out.println(result);*/
     }
-}
+    //leetcode submit region begin(Prohibit modification and deletion)
+
+    /**
+     * Definition for singly-linked list. public class ListNode { int val; ListNode next; ListNode() {} ListNode(int val) {
+     * this.val = val; } ListNode(int val, ListNode next) { this.val = val; this.next = next; } }
+     */
+    class Solution {
+
+        public ListNode reverseKGroup(ListNode head, int k) {
+
+            if (head == null || head.next == null) {
+                return head;
+            }
+            ListNode tail = head;
+            for (int i = 0; i < k; i++) {
+                if (tail == null) {
+                    return head;
+                }
+                tail = tail.next;
+            }
+
+            ListNode newHead = reverse(head, tail);
+            head.next = reverseKGroup(tail, k);
+            return newHead;
+
+        }
+
+
+        private ListNode reverse(ListNode head, ListNode tail) {
+            ListNode prev = null;
+            ListNode curr = head;
+            while (curr != tail) {
+                ListNode next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+            }
+            return prev;
+        }
+    }
 //leetcode submit region end(Prohibit modification and deletion)
 
-  }
+}
