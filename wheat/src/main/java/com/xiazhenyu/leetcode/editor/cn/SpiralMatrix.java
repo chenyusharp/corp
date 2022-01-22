@@ -1,4 +1,4 @@
-  //给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。 
+//给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
 //
 // 
 //
@@ -28,20 +28,23 @@
 // 
 // Related Topics 数组 矩阵 模拟 👍 954 👎 0
 
-  package com.xiazhenyu.leetcode.editor.cn;
+package com.xiazhenyu.leetcode.editor.cn;
 
-  import java.util.List;
+import java.util.List;
 
-  public class SpiralMatrix{
-      public static void main(String[] args) {
-           Solution solution = new SpiralMatrix().new Solution();
-      }
-      //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public List<Integer> spiralOrder(int[][] matrix) {
-        return null;
+public class SpiralMatrix {
+
+    public static void main(String[] args) {
+        Solution solution = new SpiralMatrix().new Solution();
     }
-}
+
+    //leetcode submit region begin(Prohibit modification and deletion)
+    class Solution {
+
+        public List<Integer> spiralOrder(int[][] matrix) {
+            return null;
+        }
+    }
 //leetcode submit region end(Prohibit modification and deletion)
 
-  }
+}

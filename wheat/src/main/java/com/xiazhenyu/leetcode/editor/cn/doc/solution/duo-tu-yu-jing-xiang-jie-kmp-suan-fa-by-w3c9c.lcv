@@ -1,0 +1,268 @@
+# [28. 实现 strStr()](https://leetcode-cn.com/problems/implement-strstr/)
+
+**暴力算法是不可取的，在此不做演示**。
+
+我们来看看 KMP 算法的实现细节。
+
+****
+
+先举个🌰：
+
+原字符串和匹配串如下：
+
+![28. 实现 strStr().1](https://pic.leetcode-cn.com/1637734773-kviTLU-file_1637734773442)
+
+## 1. KMP 算法的效果
+
+<![28. 实现 strStr().2](https://pic.leetcode-cn.com/1637734774-mCUBVq-file_1637734774105),![28. 实现 strStr().3](https://pic.leetcode-cn.com/1637734774-KENCeP-file_1637734774107),![28. 实现 strStr().4](https://pic.leetcode-cn.com/1637734774-yXeLnm-file_1637734774107)>
+
+看起来就是简简单单的三个步骤，我们可以看出，**其实 KMP 算法的关键，就在回退这个步骤**。
+
+## 2. 如何利用前缀表（next 数组）实现回退操作
+
+可见在回退过程中我们使用到了 next 数组，**那么 next 数组存放的是什么呢？**
+
+![28. 实现 strStr().5](https://pic.leetcode-cn.com/1637734773-QYtxBr-file_1637734772474)
+
+#### next 数组存放的是当前长度下的 最长相同前后缀 的长度
+
+以 `abcabf`举例
+
+1. `a`时，最长前后缀长度是 0
+
+   > 因为是**缀**。总长度就只有 1的话单独一个字母不算做**缀**
+   >
+   > 字符串的前缀是指不包含最后一个字符的所有以第一个字符开头的连续子串；后缀是指不包含第一个字符的所有以最后一个字符结尾的连续子串。
+
+2. `ab`时，很显然长度也是 0
+3. `abc`时，很显然长度也是 0
+
+4. `abca`时， `最长相同前后缀`长度就是 **1**了，是 `a`
+5. `abcab`时， `最长相同前后缀`长度就是 **2**了，是 `ab`
+
+6. `abcabf`时，没有 `最长相同前后缀`了，长度是0
+
+### tips
+
+`Le`和 `eL`可是**不能算相同前后缀的**
+这一点可能很多人都有误区。
+下面的定义可以反复琢磨
+
+> 字符串的前缀是指**不包含最后一个字符**的所有以**第一个字符开头**的连续子串；
+> 字符串的后缀是指**不包含第一个字符**的所有以**最后一个字符结尾**的连续子串。
+> ![28. 实现 strStr().6](https://pic.leetcode-cn.com/1637734775-OuNiBm-file_1637734775417)
+
+## 3. 深入了解 next 数组的运用
+
+- 可以看到，现在已经匹配到 `c`与 `f`，出现了第一个不相等的字母了
+
+![28. 实现 strStr().7](https://pic.leetcode-cn.com/1637734773-HUkWfu-file_1637734773447)
+
+- 怎么回退呢？答案是找到上一个
+
+  > 因为**上一个肯定是已经匹配完成的字母**，我们找到它对应的 next 数组值来指导我们进行下一步操作
+
+![28. 实现 strStr().8](https://pic.leetcode-cn.com/1637734774-FVQUTE-file_1637734774102)
+
+****
+
+那么问题来了，现在 next 数组值 **2**代表什么呢？它想让我们干什么呢？
+
+那么问题来了，现在 next 数组值 **2**代表什么呢？它想让我们干什么呢？
+
+那么问题来了，现在 next 数组值 **2**代表什么呢？它想让我们干什么呢？
+
+****
+
+**2**表示当前已经匹配的子字符串 `abcab`的**最长相同前后缀长度是 2**，而我们数组下标是从 0️⃣开始的，如果我们按照 **2**的指示，**正好可以跳转到下标  2 的位置（也就是字母C）**，开始下一次匹配。
+
+![28. 实现 strStr.add](https://pic.leetcode-cn.com/1637734773-yYIZtS-file_1637734773449)
+
+#### 前后缀起到了什么作用，怎么能确定 C 前面的字母已经匹配呢？
+
+![28. 实现 strStr().9](https://pic.leetcode-cn.com/1637734775-ZKogAh-file_1637734775322)
+
+1. 前缀的应用场景是**匹配串**；
+2. 而后缀的应用场景是**原字符串**；
+
+！！！！**next 数组记录了我们的最长相同前后缀**，在这里派上用场！！！！
+
+​	**我们也就确定了 C 前面的字母已经匹配，可以放心的匹配之后的字母了**
+
+****
+
+前面的`abc`也就没有作用，不会再被考虑，被丢弃掉了
+
+![28. 实现 strStr().4](https://pic.leetcode-cn.com/1637734774-yXeLnm-file_1637734774107)
+
+## 4. next 数组代码实现细节图
+
+* java
+
+```java
+ for (int right = 1, left = 0; right < needleLength; right++) {
+//            定义好两个指针right与left
+//            在for循环中初始化指针right为1，left=0,开始计算next数组，right始终在left指针的后面
+            while (left > 0 && needle.charAt(left) != needle.charAt(right)) {
+//                如果不相等就让left指针回退，到0时就停止回退
+                left = next[left - 1];//进行回退操作；
+            }
+            if (needle.charAt(left) == needle.charAt(right)) {
+                left++;
+            }
+            next[right] = left;
+// 这是从 1 开始的
+
+        }
+// 循环结束的时候，next数组就已经计算完毕了
+```
+
+<![28. 实现 strStr().10.png](https://pic.leetcode-cn.com/1641893160-dkCwlI-28.%20%E5%AE%9E%E7%8E%B0%20strStr().10.png),![28. 实现 strStr().11.png](https://pic.leetcode-cn.com/1641893160-ITpFkN-28.%20%E5%AE%9E%E7%8E%B0%20strStr().11.png),![28. 实现 strStr().12.png](https://pic.leetcode-cn.com/1641893160-mBaevh-28.%20%E5%AE%9E%E7%8E%B0%20strStr().12.png),![28. 实现 strStr().13.png](https://pic.leetcode-cn.com/1641893160-mBaevh-28.%20%E5%AE%9E%E7%8E%B0%20strStr().13.png),![28. 实现 strStr().14.png](https://pic.leetcode-cn.com/1641893160-lETBlC-28.%20%E5%AE%9E%E7%8E%B0%20strStr().14.png),![28. 实现 strStr().15.png](https://pic.leetcode-cn.com/1641893160-hbfEhP-28.%20%E5%AE%9E%E7%8E%B0%20strStr().15.png)>
+
+## 5. 代码实现
+
+* java
+
+```java
+    class Solution {
+    public int strStr(String haystack, String needle) {
+//自己敲一下子 前缀表不需要减一的实现方式
+        int needleLength = needle.length();
+        if (needleLength == 0) return 0;
+//        当needle是空字符串时，返回0
+
+        int[] next = new int[needleLength];
+//        定义好next数组
+        for (int right = 1, left = 0; right < needleLength; right++) {
+//            定义好两个指针right与left
+//            在for循环中初始化指针right为1，left=0,开始计算next数组，right始终在left指针的后面
+            while (left > 0 && needle.charAt(left) != needle.charAt(right)) {
+//                如果不相等就让left指针回退，到0时就停止回退
+                left = next[left - 1];//进行回退操作；
+            }
+            if (needle.charAt(left) == needle.charAt(right)) {
+                left++;
+            }
+            next[right] = left;
+// 这是从 1 开始的
+
+        }
+// 循环结束的时候，next数组就已经计算完毕了
+
+
+        for (int i = 0,j=0; i <haystack.length() ; i++) {
+
+            while (j>0&&haystack.charAt(i)!=needle.charAt(j)){
+                j=next[j-1];
+            }
+            if (haystack.charAt(i)==needle.charAt(j)){
+                j++;
+            }
+            if (j==needleLength) return i-needleLength+1;
+        }
+        return -1;
+
+
+    }
+}
+
+```
+
+**如果觉得有用请一定点个赞!!**
+
+# 6. next数组的思考题
+
+不知道小伙伴们有没有**很详细的思考了代码**。**我给大家提一个问题**，也是我自己有过的问题。
+
+* java
+
+```java
+ while (left > 0 && needle.charAt(left) != needle.charAt(right)) {
+//                如果不相等就让left指针回退，到0时就停止回退
+                left = next[left - 1];//进行回退操作；
+            }
+```
+
+**如果不相等就让left指针回退，到0时就停止回退**`left = next[left - 1]`
+
+这句代码干了什么？为什么要根据`left = next[left - 1]`回退？直接回退到 0 位置可不可以？
+
+下面对 next 数组生成的一些具体代码做详细描述，这里希望小伙伴们能先自己思考吗，然后再结合下面内容。
+
+****
+
+我们先举个**新的**栗子：
+
+下图是正在进行 `next` 数组运算。
+
+可以看到，当 left 指针指到 `f`，right 指针指到 `e`的时候，已经出现 `f` 不等于 `e`的情况。
+
+![28. 实现 strStr().16](https://pic.leetcode-cn.com/1641735890-rLqUBB-file_1641735889847)
+
+### 这时候我们的 left 指针应该怎么办呢？
+
+`left = next[left - 1];`
+
+最长前缀和最长后缀是**最长相同前后缀**，见图右半部分。
+
+![28. 实现 strStr().17](https://pic.leetcode-cn.com/1641735888-jrfJzQ-file_1641735888571)
+
+> 当前 left 指向的下标为 `5`
+
+这时候，根据`left = next[left - 1]`的操作
+
+left 指针并不会退回 0 的起点，而是根据**最长相同前后缀**的特点（下图）
+
+![28. 实现 strStr().18](https://pic.leetcode-cn.com/1641735890-dVlAlZ-file_1641735889857)
+
+让 left 退到 `ab`的位置
+
+> left = next[left - 1];
+>
+> left 指针也就根据 next[5-1]所对应的 `2` ，移动到了  **下标为 2** 的 `e` 的位置上
+
+![28. 实现 strStr().19](https://pic.leetcode-cn.com/1641735890-zDOpDk-file_1641735889847)
+
+这时候，最长前缀变成 `ab`，**最长后缀**因为要**和最长前缀保持一致**，也缩水成了 `ab`。
+
+****
+
+接着将 `left` 指针指向的 `e` 和 `right` 指针指向的 `e` 进行对比，发现相等。
+
+就更新了当前数组的 **next 数组**
+
+![28. 实现 strStr().20](https://pic.leetcode-cn.com/1641735890-bfTtHs-file_1641735889847)
+
+### 简单粗暴退回 让 left 退回 0 会发生什么？
+
+答案是算法会出现错误
+
+![28. 实现 strStr().21](https://pic.leetcode-cn.com/1641735890-vxzoTQ-file_1641735889847)
+
+上图中 left 指针已经退回了 下标为 0 的元素，接下来将 `left` 指针指向的`a` 和 `right` 指针指向的 `e` 进行对比，**不相等**。
+
+于是出现大问题——**最长相同前后缀算错了**！！！
+
+![28. 实现 strStr().22](https://pic.leetcode-cn.com/1641735890-yTGVvw-file_1641735889847)
+
+想要补救也根本不可能：
+
+因为 right 指针不能往回走——也就不能让 `a`和 `a`匹配了。
+
+![28. 实现 strStr().23](https://pic.leetcode-cn.com/1641735890-dOVvPW-file_1641735889857)
+
+****
+
+## 总结
+
+其实说到这里也就会发现，我们为什么能**根据next 数组快速查找匹配串**？
+
+如何做到下图**这样找到已经匹配完成的字母**`ab`，从而直接判断 `c`与 `c`，而不是从头再开始比较呢？
+
+![28. 实现 strStr().9](https://pic.leetcode-cn.com/1641735888-BfPVAI-file_1641735887706)
+
+答案就是： **next 数组的生成过程就是这样的**，**用到了同样的原理**，**为实现查找匹配串奠定了基础**。
+
+![28. 实现 strStr().18](https://pic.leetcode-cn.com/1641735890-lrvxfD-file_1641735889857)
+
+**如果觉得有用请一定点个赞!!，作者看到会很开心，哈哈哈😁**

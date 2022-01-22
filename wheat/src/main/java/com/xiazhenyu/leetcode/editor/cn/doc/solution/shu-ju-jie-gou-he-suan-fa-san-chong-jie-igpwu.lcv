@@ -1,0 +1,123 @@
+### 解法一
+
+这题说的**不能使用```*，/，%```等符号**，那么只能使用减法了，一种方式就是不停的减，比如```20/3```，用```20```不停的减去```3```，但这种效率太差。可以用```20```减去```3```的倍数，我们发现```20```减去```6```要比减去```3```更快，当不够减的时候再用他减去```3```。我们还发现用```20```减去```12```的时候要比减去```6```更快，所以发现一个规律，就是**把除数不停的往左移，当除数离被除数最近的时候就用被除数减去除数**。
+
+<br> </br>
+
+这里要注意的是他们的符号，可以先把他们转化为正数，还有一点要注意就是```Integer.MIN_VALUE```转化为正数的时候会溢出，可以都转化为```long```类型。
+
+* java
+
+```java
+public int divide(int dividend, int divisor) {
+    int sign = (dividend ^ divisor) >= 0 ? 1 : -1;//判断符号
+    long dividendTemp = Math.abs((long) dividend);//求绝对值
+    long divisorTemp = Math.abs((long) divisor);
+    long res = 0;
+    while (dividendTemp >= divisorTemp) {
+        long tmp = divisorTemp;
+        long times = 1;//除数divisor的倍数
+        while (dividendTemp >= (tmp << 1)) {
+            tmp <<= 1;
+            times <<= 1;
+        }
+        //被除数减去除数的times倍
+        dividendTemp -= tmp;
+        //累加times
+        res += times;
+    }
+    //添加符号
+    res = sign > 0 ? res : -res;
+    //需要判断是否有溢出
+    return res > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) res;
+}
+```
+
+<br> </br>
+
+### 解法二
+
+上面的解法有一定的局限性，为了防止溢出我们可以把```int```转化为```long```类型，但如果题中给的数据是```long```类型，就束手无策了。实际上也可以不用转，我们看一下```int```类型的范围
+
+**-2147483648 到 2147483647**
+
+<br> </br>
+
+也就是说如果我们**把一个负数转化为正数可能会出现溢出，但把一个正数转化为一个负数就不会出现溢出**。所以我们可以**先把被除数和除数转化为负数**，然后让他们相减。
+
+* java
+
+```java
+public int divide(int dividend, int divisor) {
+    int sign = (dividend ^ divisor) >= 0 ? 1 : -1;//判断符号
+    dividend = -Math.abs(dividend);//都转换为负数
+    divisor = -Math.abs(divisor);//都转换为负数
+    int res = 0;
+    //阈值，越界警告值
+    int threshold = Integer.MIN_VALUE >> 1;
+    while (dividend <= divisor) {
+        int tmp = divisor;
+        int times = 1;
+        //tmp >= threshold，防止tmp一直往左移导致溢出
+        while (tmp >= threshold && dividend <= (tmp << 1)) {
+            tmp <<= 1;
+            times <<= 1;
+        }
+        dividend -= tmp;
+        res -= times;
+    }
+    //是否有溢出
+    if (res == Integer.MIN_VALUE && sign == 1)
+        return Integer.MAX_VALUE;
+    return sign < 0 ? res : -res;
+}
+```
+
+<br> </br>
+
+### 难度升级
+
+这题说的是不能使用乘法，除法，求余运算符。如果在限制一下，除了上面```3```种运算符以外，还不能使用```“+”，“-”```符号，看下该怎么解，我们来把上面第二种答案修改一下，如下所示，没有使用任何加减乘除符号
+
+* java
+
+```java
+public int divide(int dividend, int divisor) {
+    boolean sign = (dividend ^ divisor) >= 0;//判断符号
+    dividend = dividend < 0 ? dividend : ~subtraction(dividend, 1);
+    divisor = divisor < 0 ? divisor : ~subtraction(divisor, 1);
+    int res = 0;
+    int threshold = Integer.MIN_VALUE >> 1;
+    while (dividend <= divisor) {
+        int tmp = divisor;
+        int times = 1;
+        //tmp >= threshold，防止tmp一直往左移导致溢出
+        while (tmp >= threshold && dividend <= (tmp << 1)) {
+            tmp <<= 1;
+            times <<= 1;
+        }
+        dividend = subtraction(dividend, tmp);
+        res = subtraction(res, times);
+    }
+    //是否有溢出
+    if (res == Integer.MIN_VALUE && sign)
+        return Integer.MAX_VALUE;
+    return !sign ? res : ~subtraction(res, 1);
+}
+
+private int subtraction(int a, int b) {
+    if (b == 0)
+        return a;
+    int c = a & b;
+    a ^= c;
+    b ^= c;
+    return subtraction(a | b, b << 1);
+}
+```
+
+**提示：**
+- 求```x```的相反数：```~(x-1)```或者```~x+1```
+
+<br> </br>
+
+学习更多算法题还可以关注我的个人主页：[数据结构和算法](https://leetcode-cn.com/u/sdwwld/)
