@@ -1,9 +1,6 @@
-package stream;
-
-import static java.util.stream.Collectors.toList;
+package stream_lambda;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

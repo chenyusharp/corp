@@ -1,0 +1,105 @@
+### 解题思路
+
+**方法1：从后往前找**
+为什么从后往前找？
+因为需要找到的是**下一个更大的排列**，所以尽可能的将**右边**部分的数变大，越往左变越不可能是下一个更大的排列，可能是下几个更大的排列。
+为什么找到第一个左边数L小于右边数R的位置后，需要从右边开始找到第一个大于L位置的数进行交换，并且后面的数只要**逆序**就可以了？
+首先算法过程是如果L位置的数>R位置的数则一起向左移动，向左移动的过程中R位置的数一定是小于L位置的数的即假设：
+-当前位置R' L' `nums[R'] < nums[L']`
+-移动后`(R = R'--, L = L'--)`，`nums[R] < nums[L] = nums[R'] < nums[L']`
+后面的数呈倒序，所以只要将后面的数进行反转则后面的数此时肯定是最小的排列。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int R = n - 1;
+        int L = R - 1;
+        while(L >= 0){
+            if(nums[R] > nums[L]){
+                for(int i=n-1; i>=R; i--){
+                    if(nums[i] > nums[L]){
+                        swap(nums, i, L);
+                        break;
+                    }
+                }
+                int i = n - 1;
+                int j = R;
+                while(j < i){
+                    swap(nums, i, j);
+                    i--;
+                    j++;
+                }
+                return;
+            }else{
+                R--;
+                L--;
+            }
+        }
+        Arrays.sort(nums);
+        return;
+
+    }
+    public void swap(int[] nums, int a, int b){
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+```
+
+**方法2：从前往后找**
+
+其实思想是一样的，**就是希望尽可能地改变靠右的数**，所以首先双重for循环找到最靠右的i位置（左边）小于j位置（右边）的数，然后进行交换，交换后后面的数呈倒序，只要再将后面的数反转之后就是下一个更大的排列。
+
+* java
+
+```java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        if(n == 1) return;
+        int flagi = -1;
+        int flagj = -1;
+        // 先确定位置
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                if(nums[i] < nums[j]){
+                    flagi = i;
+                    flagj = j;
+                }
+            }
+        }
+        // 有这样的位置存在
+        if(flagi > -1){
+            swap(nums, flagi, flagj);
+            int L = flagi + 1;
+            int R = n - 1;
+            while(L < R){
+                swap(nums, L, R);
+                L++;
+                R--;
+            }
+            return;
+        }
+        // 没有这样的位置存在 直接返回最小即反转当前排列
+        int L = 0;
+        int R = n - 1;
+        while(L < R){
+            swap(nums, L, R);
+            L++;
+            R--;
+        }
+    }
+    public void swap(int[] nums, int L, int R){
+        int temp = nums[L];
+        nums[L] = nums[R];
+        nums[R] = temp;
+    }
+}
+```
+

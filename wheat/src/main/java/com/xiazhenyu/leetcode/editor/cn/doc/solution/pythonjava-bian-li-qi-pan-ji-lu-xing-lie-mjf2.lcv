@@ -1,0 +1,53 @@
+### 解题思路
+
+不合格的数独其实就是某一行、某一列、某个方块中某个数字出现了不止一次。
+那么我们一边遍历一边记录上述三个地方的数字标记为出现，遇到有相同数字存在直接返回false即可。
+
+### 代码
+
+* []
+
+```Python3
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        # 0: row, 1: column, 2: square
+        record = {0:defaultdict(set), 1:defaultdict(set), 2:defaultdict(set)}
+        n = len(board)
+        m = sqrt(n)
+        for i in range(n):
+            for j in range(n):
+                if board[i][j] == '.':
+                    continue
+                if board[i][j] in record[0][i] or board[i][j] in record[1][j]:
+                    return False
+                sq = i // m * m + j // m
+                if board[i][j] in record[2][sq]:
+                    return False
+                record[0][i].add(board[i][j])
+                record[1][j].add(board[i][j])
+                record[2][sq].add(board[i][j])
+        return True
+```
+
+* []
+
+```Java
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        int n = board.length;
+        boolean[][] rows = new boolean[n][n], columns = new boolean[n][n], squares = new boolean[n][n];
+        int m = (int)Math.sqrt(n);
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++){
+                if(board[i][j] == '.')
+                    continue;
+                int num = board[i][j] - '1', sq = i/m * m + j/m;
+                if(rows[i][num] || columns[j][num] || squares[sq][num])
+                    return false;
+                rows[i][num] = columns[j][num] = squares[sq][num] = true;
+            }
+        return true;
+    }
+}
+```
+

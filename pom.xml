@@ -19,6 +19,7 @@
         <module>ostrich</module>
         <module>Potato</module>
         <module>Sesame</module>
+        <module>cane</module>
     </modules>
     <properties>
         <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
@@ -78,6 +79,11 @@
                         <artifactId>jedis</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.40</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

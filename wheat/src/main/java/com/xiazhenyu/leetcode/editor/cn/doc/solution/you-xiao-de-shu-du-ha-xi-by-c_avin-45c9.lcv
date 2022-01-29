@@ -1,0 +1,41 @@
+#### 有效的数独
+
+- 储存行的数据，当前行不能出现重复的数字
+- 储存行的数据，当前行不能出现重复的数字
+- 储存9宫格的数据，当前9宫格不能出现重复的数字，9宫格共9个，其下标0-8
+
+* js
+
+```js
+/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+ var isValidSudoku = function(board) {
+    let row = {} // 储存行出现的数字
+    let colums = {} // 储存列出现的数字
+    let boxes = {} // 9宫格盒子共9个，储存每个盒子出现过的数字
+
+    // 遍历数组
+    for(let i =0;i<9;i++) {
+        for(let j=0;j<9;j++) {
+            let num = board[i][j]
+            if(num !== '.') { // 字符为有效数字
+                // 获取九宫格的序号
+                let boxIndex = parseInt(i/3) * 3 + parseInt(j/3) // 计算出盒子位置0-8
+                if(row[i+'-'+num] || colums[j+'-'+num] || boxes[boxIndex+'-'+num]) {
+                    return false
+                }
+
+                row[i+'-'+num] = true // 例如： 0-5，代表0行中出现5
+                colums[j+'-'+num] = true // 例如： 0-5，代表0列中出现5
+                boxes[boxIndex+'-'+num] = true // 例如： 1-5，9宫格盒子共9个，序号0-8，代表序号1的盒子中有5
+            }
+        }
+    }
+
+    return true
+};
+```
+
+**复杂度分析** - 时间复杂度：O(N) 。 - 空间复杂度：O（N）
