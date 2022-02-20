@@ -1,4 +1,4 @@
-  //给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。 
+//给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
 //
 // 你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。 
 //
@@ -31,17 +31,46 @@
 // 
 // Related Topics 数组 数学 矩阵 👍 1159 👎 0
 
-  package com.xiazhenyu.leetcode.editor.cn;
-  public class RotateImage{
-      public static void main(String[] args) {
-           Solution solution = new RotateImage().new Solution();
-      }
-      //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public void rotate(int[][] matrix) {
+package com.xiazhenyu.leetcode.editor.cn;
 
+public class RotateImage {
+
+    public static void main(String[] args) {
+        Solution solution = new RotateImage().new Solution();
     }
-}
+
+    //leetcode submit region begin(Prohibit modification and deletion)
+    class Solution {
+
+        public void rotate(int[][] matrix) {
+
+            /*int row = matrix.length;
+            int col = matrix[0].length;
+            int[][] matrixNew = new int[row][col];
+            for (int i = 0; i < row; ++i) {
+                for (int j = 0; j < col; j++) {
+                    matrixNew[j][row - i - 1] = matrix[i][j];
+                }
+            }
+            //copy
+            for (int i = 0; i < row; ++i) {
+                for (int j = 0; j < col; ++j) {
+                    matrix[i][j] = matrixNew[i][j];
+                }
+            }*/
+
+            int n = matrix.length;
+            for (int i = 0; i < n / 2; ++i) {
+                for (int j = 0; j < (n + 1) / 2; ++j) {
+                    int temp = matrix[i][j];
+                    matrix[i][j] = matrix[n - j - 1][i];
+                    matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                    matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                    matrix[j][n - i - 1] = temp;
+                }
+            }
+        }
+    }
 //leetcode submit region end(Prohibit modification and deletion)
 
-  }
+}
