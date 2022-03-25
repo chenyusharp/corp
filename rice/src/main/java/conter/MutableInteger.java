@@ -38,7 +38,6 @@ public final class MutableInteger {
 
 
     public static Map<String, MutableInteger> count(List<String> strings) {
-
         HashMap<String, MutableInteger> c = new HashMap<>();
         strings.forEach(per -> {
             MutableInteger mutableInteger = new MutableInteger(1);
@@ -48,7 +47,6 @@ public final class MutableInteger {
             }
         });
         return c;
-
     }
 
 

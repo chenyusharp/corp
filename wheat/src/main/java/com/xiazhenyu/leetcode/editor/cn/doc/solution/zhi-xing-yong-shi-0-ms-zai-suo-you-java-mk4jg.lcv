@@ -1,0 +1,66 @@
+### the core idea
+
+1> The length of K my be greater than the length of the list,so need to:
+`realK =  k%length;`
+2> realK is in reverse order, modified to order：
+`int moveK = length - realK;`
+3>  prevent dead loops
+`lastNode.next=null;`
+
+### 代码
+
+* java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+
+            ListNode tmp = head;
+            int length=0;
+            while(tmp!=null){
+                 length++;
+                 tmp = tmp.next;   
+            }
+            if(length==0 || length==1){
+                return head;
+            }
+            int realK =  k%length;
+            if(realK ==0){
+                return head;
+            }
+            int moveK = length - realK;
+
+            int step=0;
+            tmp = head;
+            ListNode lastNode=tmp;
+            while(step<moveK){
+                 step++;
+                 lastNode = tmp;
+                 tmp = tmp.next;
+                 
+            }
+            ListNode newHead = tmp;
+            while(tmp.next!=null){
+                tmp = tmp.next;
+            }
+            tmp.next = head;
+            lastNode.next=null;
+            return newHead;
+
+
+
+
+    }
+}
+```
+
