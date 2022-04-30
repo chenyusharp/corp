@@ -70,7 +70,7 @@ public class ReverseLinkedList {
      */
     class Solution {
 
-        public ListNode reverseList(ListNode head) {
+        public ListNode reverseList3(ListNode head) {
 
            /* ListNode reverse = head;
             ListNode temp = head;
@@ -92,6 +92,36 @@ public class ReverseLinkedList {
             }
             return prev;
         }
+
+
+        public ListNode reverseList1(ListNode head) {
+            if (head == null || head.next == null) {
+                return head;
+            }
+            ListNode preNode = null;
+            ListNode curNode = head;
+            while (curNode != null) {
+                ListNode nextNode = head.next;
+                curNode.next = preNode;
+                preNode = curNode;
+                curNode = nextNode;
+            }
+            return preNode;
+        }
+
+
+        public ListNode reverseList(ListNode head) {
+            if (head == null || head.next == null) {
+                return head;
+            }
+            ListNode nextHead = head.next;
+            ListNode newHead = reverseList(nextHead);
+            nextHead.next = head;
+            head.next = null;
+            return newHead;
+
+        }
+
     }
 //leetcode submit region end(Prohibit modification and deletion)
 
