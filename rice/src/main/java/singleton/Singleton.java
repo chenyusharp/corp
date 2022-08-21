@@ -1,4 +1,4 @@
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
+package singleton;
 
 /**
  * Date: 2021/8/12
@@ -11,7 +11,7 @@ public class Singleton {
 
 
     //此处使用volatile修饰，为了防止jv对singleton对象的重排序，
-    // 因为singleton=new Singleton()  这个操作并不是原子的，
+    // 因为singleton=new singleton.Singleton()  这个操作并不是原子的，
     //step1 给singleton分配内存空间
     //step2 调用singleton的构造函数等来初始化singleton对象
     //step3 将singleton对象指向分配的内存空间（执行完这一步singleton对象就不是null了）
