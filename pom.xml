@@ -12,7 +12,7 @@
     <modules>
         <module>wheat</module>
         <module>rice</module>
-        <module>soybean(SPI)</module>
+        <module>soybean</module>
         <module>corn</module>
         <module>cucumber</module>
         <module>peanut</module>
