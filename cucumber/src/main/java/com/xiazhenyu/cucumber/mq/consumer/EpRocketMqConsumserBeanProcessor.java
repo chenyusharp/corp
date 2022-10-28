@@ -21,6 +21,7 @@ import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.MessageSelector;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -131,9 +132,13 @@ public class EpRocketMqConsumserBeanProcessor implements BeanPostProcessor {
                 setOrderLyListener(bean, method, consumer);
             } else {
                 consumer.setMaxReconsumeTimes(5);
-
+                setConcurrentlyListener(bean, method, consumer);
             }
-
+            consumer.setMessageModel(anno.mmessageModel());
+            consumer.start();
+            //
+            String topic=anno.topic().getNameHelper();
+            this.tryCreateTopic(anno,consumer,topic);
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -178,6 +183,18 @@ public class EpRocketMqConsumserBeanProcessor implements BeanPostProcessor {
     }
 
 
+    private void tryCreateTopic(EpRocketMqConsumerMethod anno, DefaultMQPushConsumer consumer, String topic)
+            throws MQClientException {
+        if (null == consumer.getDefaultMQPushConsumerImpl().getmQClientFactory().getAnExistTopicRouteData(topic)) {
+            try {
+                consumer.getDefaultMQPushConsumerImpl().createTopic("TBW102", topic, anno.queueNum());
+            } catch (Exception e) {
+                log.warn("");
+            }
+            this.consumerReSubscribe(anno,consumer);
+        }
+    }
+
     private void setOrderLyListener(Object bean, Method method, DefaultMQPushConsumer consumer) {
         consumer.registerMessageListener((List<MessageExt> msgs, ConsumeOrderlyContext context) -> {
             MessageExt currentMsg = null;
@@ -198,7 +215,7 @@ public class EpRocketMqConsumserBeanProcessor implements BeanPostProcessor {
 
 
     private void setConcurrentlyListener(Object bean, Method method, DefaultMQPushConsumer consumer) {
-        consumer.registerMessageListener((List<MessageExt> msgs,ConsumeConcurrentlyContext context) -> {
+        consumer.registerMessageListener((List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
             MessageExt currentMsg = null;
             try {
 
@@ -211,20 +228,9 @@ public class EpRocketMqConsumserBeanProcessor implements BeanPostProcessor {
                 }
             } catch (Exception e) {
             }
-            return ConsumeOrderlyStatus.SUCCESS;
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         });
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void invokeConsumerMessage(Object bean, Method method, MessageExt messageExt)
