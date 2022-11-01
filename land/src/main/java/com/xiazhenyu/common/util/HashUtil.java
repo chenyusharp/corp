@@ -87,5 +87,139 @@ public class HashUtil {
         return hash;
     }
 
+    /**
+     * HFIP Hash算法
+     *
+     * @param data 字符串
+     * @return hash结果
+     * @since 5.8.0
+     */
+    public static long hfIpHash(String data) {
+        int length = data.length();
+        long hash = 0;
+        for (int i = 0; i < length; i++) {
+            hash += data.charAt(i % 4) ^ data.charAt(i);
+        }
+        return hash;
+    }
+
+
+    /**
+     * JS算法
+     *
+     * @param str 字符串
+     * @return hash值
+     */
+    public static int jsHash(String str) {
+        int hash = 1315423911;
+        for (int i = 0; i < str.length(); i++) {
+            hash ^= ((hash << 5) + str.charAt(i) + (hash >> 2));
+        }
+        return Math.abs(hash) & 0x7FFFFFFF;
+    }
+
+
+    /**
+     * PJW算法
+     *
+     * @param str 字符串
+     * @return hash值
+     */
+    public static int pjwHash(String str) {
+        int bitsInUnsignedInt = 32;
+        int threeQuarters = (bitsInUnsignedInt * 3) / 4;
+        int oneEighth = bitsInUnsignedInt / 8;
+        int highBits = 0xFFFFFFFF << (bitsInUnsignedInt - oneEighth);
+        int hash = 0;
+        int test;
+        for (int i = 0; i < str.length(); i++) {
+            hash = (hash << oneEighth) + str.charAt(i);
+
+            if ((test = hash & highBits) != 0) {
+                hash = ((hash ^ (test >> threeQuarters)) & (~highBits));
+            }
+        }
+        return hash & 0x7FFFFFFF;
+    }
+
+
+    /**
+     * RS算法hash
+     *
+     * @param str 字符串
+     * @return hash值
+     */
+    public static int rsHash(String str) {
+        int b = 378551;
+        int a = 63689;
+        int hash = 0;
+        for (int i = 0; i < str.length(); i++) {
+            hash = hash * a + str.charAt(i);
+            a = a * b;
+        }
+        return hash & 0x7FFFFFFF;
+    }
+
+    /**
+     * SDBM算法
+     *
+     * @param str 字符串
+     * @return hash值
+     */
+    public static int sdbmHash(String str) {
+        int hash = 0;
+        for (int i = 0; i < str.length(); i++) {
+            hash = str.charAt(i) + (hash << 6) + (hash << 16) - hash;
+        }
+        return hash & 0x7FFFFFFF;
+    }
+
+    /**
+     * TianL Hash算法
+     *
+     * @param str 字符串
+     * @return Hash值
+     */
+    public static long tianlHash(String str) {
+        long hash;
+
+        int iLength = str.length();
+        if (iLength == 0) {
+            return 0;
+        }
+
+        if (iLength <= 256) {
+            hash = 16777216L * (iLength - 1);
+        } else {
+            hash = 4278190080L;
+        }
+
+        int i;
+
+        char ucChar;
+
+        if (iLength <= 96) {
+            for (i = 1; i <= iLength; i++) {
+                ucChar = str.charAt(i - 1);
+                if (ucChar <= 'Z' && ucChar >= 'A') {
+                    ucChar = (char) (ucChar + 32);
+                }
+                hash += (3L * i * ucChar * ucChar + 5L * i * ucChar + 7L * i + 11 * ucChar) % 16777216;
+            }
+        } else {
+            for (i = 1; i <= 96; i++) {
+                ucChar = str.charAt(i + iLength - 96 - 1);
+                if (ucChar <= 'Z' && ucChar >= 'A') {
+                    ucChar = (char) (ucChar + 32);
+                }
+                hash += (3L * i * ucChar * ucChar + 5L * i * ucChar + 7L * i + 11 * ucChar) % 16777216;
+            }
+        }
+        if (hash < 0) {
+            hash *= -1;
+        }
+        return hash;
+    }
+
 
 }
