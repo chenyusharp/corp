@@ -1,6 +1,6 @@
 package com.xiazhenyu.cucumber.filter;
 
-import java.util.function.Function;
+import com.xiazhenyu.common.util.HashUtil;
 
 /**
  * Date: 2022/10/31
@@ -16,10 +16,10 @@ public class DefaultFilter extends FuncFilter {
 
 
     public DefaultFilter(long maxValue) {
-        super(maxValue, DEFAULT_MACHINE_NUM);
+        this(maxValue, DEFAULT_MACHINE_NUM);
     }
 
     public DefaultFilter(long maxValue, int machineNum) {
-        super(maxValue, machineNum,);
+        super(maxValue, machineNum, HashUtil::javaDefaultHash);
     }
 }

@@ -21,6 +21,7 @@
         <module>Sesame</module>
         <module>cane</module>
         <module>broccoli</module>
+        <module>common</module>
     </modules>
     <properties>
         <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
