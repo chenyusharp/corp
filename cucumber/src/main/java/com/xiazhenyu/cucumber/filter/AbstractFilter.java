@@ -7,7 +7,7 @@ package com.xiazhenyu.cucumber.filter;
  *
  * @author xiazhenyu
  */
-public abstract class AbstractFilter implements BomFilter {
+public abstract class AbstractFilter implements BloomFilter {
 
     private static final long serialVersionUID = -6313197924306774958L;
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author xiazhenyu
  */
-public interface BomFilter extends Serializable {
+public interface BloomFilter extends Serializable {
 
 
     boolean contains(String str);
