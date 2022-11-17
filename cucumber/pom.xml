@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cucumber</artifactId>
+    <artifactId>MQ</artifactId>
 
-    <name>MQ</name>
+    <name>cucumber</name>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
