@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>potato</artifactId>
+    <artifactId>httpServer</artifactId>
 
-    <name>httpServer</name>
+    <name>potato</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>peanut</artifactId>
+    <artifactId>rpc</artifactId>
 
-    <name>rpc</name>
+    <name>peanut</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
