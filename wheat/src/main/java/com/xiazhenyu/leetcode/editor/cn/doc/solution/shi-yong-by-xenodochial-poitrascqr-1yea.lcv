@@ -1,0 +1,38 @@
+假设现在有集合[1,2,3,...,n]，我们先来考虑第一种情况：当首个排列字符为“1”的时候，那么第二个字符只能从[2,3,...,n]中选，不能再次为“1”。如果第二个排列字符为“2”，那么第三个字符只能从[3,...,n]中选，不能再次为“1”或者“2”。
+
+所以，我们只需要在循环的时候，将删除了当前需要排列的字符的集合作为新的集合传递给下次循环。当集合中只剩下最后一个字符时，说明这是当前排列方式的最后一个字符，那么递归结束，将当前排列方式的整体字符串放置到一个数组中，根据所传参数 k 返回对应 index 的字符串。
+
+* js
+
+```js
+var getPermutation = function(n, k) {
+    let arr =[]
+    let res=[]
+    for(let i = 1;i<=n;++i){
+        arr.push(i+"") // [1,2,3,...,n]
+    }
+    useList("",arr,res)
+    return res[k-1] || -1
+};
+
+function useList(parent,data,res){
+  for(let index =0;index<data.length;++index){
+    // 获取当前排列的字符
+    const val = data[index]
+    // 将当前排列字符添加到当前排列方式字符串中，如：“123”
+    const child = parent+val
+    if(data.length>1){
+      // 复制集合
+      const box = [].concat(data)
+      // 删除已排列的字符
+      box.splice(index,1)
+      // 递归
+      useList(child,box,res)
+    }else{
+      // 递归完成后将字符串放进结果数组中
+      res.push(child)
+    }  
+  }
+}
+```
+

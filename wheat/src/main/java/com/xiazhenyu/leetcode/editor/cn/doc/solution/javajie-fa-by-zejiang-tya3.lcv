@@ -1,0 +1,44 @@
+> Problem: [60. 排列序列](https://leetcode.cn/problems/permutation-sequence/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public String getPermutation(int n, int k) {
+        int[] arr = new int[n];
+        arr[0] = 1;
+        // 保存每个位置上的阶乘
+        for (int i = 1; i < n; i++) {
+            arr[i] = i * arr[i - 1];
+        }
+        --k;
+        int[] valid = new int[n + 1]; // 用来记录是否访问过
+        Arrays.fill(valid, 1);
+        StringBuilder res = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            int x = k / arr[n - i] + 1; // 表示第一个位置的数字
+            for (int j = 1; j <= n; j++) {
+                x -= valid[j];
+                if (x == 0) {
+                    valid[j] = 0;
+                    res.append(j); // 找到了对应的数字
+                    break;
+                }
+            }
+            k %= arr[n - i]; // 找下个位置, 需要除以当前阶乘 (n-1)!
+        }
+        return res.toString();
+    }
+}
+
+```
+
