@@ -2,7 +2,6 @@ package com.xiazhenyu.corp.orm.plugins;
 
 import java.lang.reflect.Constructor;
 import java.util.Properties;
-import org.springframework.util.StringUtils;
 
 /**
  * Date: 2022/12/30
@@ -15,7 +14,7 @@ public abstract class CacheFactory {
 
 
     public static <K, V> Cache<K, V> createCache(String sqlCacheClass, String prefix, Properties properties) {
-        if (StringUtils.isEmpty(sqlCacheClass)) {
+        if (sqlCacheClass != null) {
             try {
                 Class.forName("com.google.common.cache.Cache");
                 return new GuavaCache<>(properties, prefix);
