@@ -40,5 +40,10 @@ public interface BoundSqlInterceptor {
         BoundSql doBoundSql(Type type, BoundSql boundSql, CacheKey cacheKey);
     }
 
+   public static void main(String[] args) {
+    String name="xzy";
+    System.out.println(name);
+    }
+
 
 }
