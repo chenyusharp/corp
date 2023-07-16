@@ -16,6 +16,7 @@ public class SPIMain {
         ServiceLoader<IShout> shouts = ServiceLoader.load(IShout.class);
         for (IShout shout : shouts) {
             System.out.println("main conmit");
+            System.out.println("main second commit");
             shout.shout();
         }
     }
