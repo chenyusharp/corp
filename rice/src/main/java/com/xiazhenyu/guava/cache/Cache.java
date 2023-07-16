@@ -1,4 +1,4 @@
-package com.xiazhenyu.guava;
+package com.xiazhenyu.guava.cache;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

@@ -46,9 +46,9 @@ public class LocalDateUtil {
 //
         System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
 
-//        final LocalDateTime localDateTime = LocalDateTime.parse("2023/01/01 22:13:01", dateTimeFormatter);
-//
-//        System.out.println(localDateTime);
+        final LocalDateTime localDateTime = LocalDateTime.parse("2023-01-01 22:13:01", dateTimeFormatter);
+
+        System.out.println(localDateTime);
 
 //        final LocalDateTime localDateTime = LocalDateTime.of(2023, 01, 01, 22, 23, 01);
 //        System.out.println(localDateTime);
@@ -91,7 +91,7 @@ public class LocalDateUtil {
         System.out.println(duration);
 
         final Period period = LocalDate.of(2023, 1, 1).until(LocalDate.of(2023, 2, 22));
-        System.out.println(period);
+        System.out.println(period.getDays());
 
         final LocalTime localTime_start = LocalTime.of(12, 34, 44);
         final LocalTime localTime_end = LocalTime.of(14, 23, 55);
