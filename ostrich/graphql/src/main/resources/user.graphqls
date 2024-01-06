@@ -1,0 +1,24 @@
+schema {
+    query: UserQuery
+}
+
+type UserQuery {
+    queryUser : ResultVO
+    ## queryUser：类似于java中方法名
+}
+
+type ResultVO {
+    item: [User]
+    total: Int
+}
+
+type User {
+    id: ID!
+    name:String
+    age:Int
+    card:Card
+}
+type Card {
+    cardNumber:String
+    userId:ID
+}
