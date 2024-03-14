@@ -87,7 +87,7 @@ public class LocalDateUtil {
 
         final LocalDateTime start = LocalDateTime.of(2023, 1, 1, 23, 16, 1);
         final LocalDateTime end = LocalDateTime.of(2023, 2, 1, 8, 12, 34);
-        final Duration duration = Duration.between(start, end);
+        final Duration duration = Duration.between(start, start);
         System.out.println(duration);
 
         final Period period = LocalDate.of(2023, 1, 1).until(LocalDate.of(2023, 2, 22));

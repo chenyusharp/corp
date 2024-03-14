@@ -1,8 +1,11 @@
 package com.eptison.tools;
 
+import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -15,6 +18,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class EpPairV2<K, V> {
 
     private K left;
@@ -40,5 +44,10 @@ public class EpPairV2<K, V> {
                 .append(left)
                 .append(right)
                 .toHashCode();
+    }
+
+    public static void main(String[] args) {
+        boolean ischekc=true;
+        System.out.println(EpOptionalUtils.isTrue(ischekc).flatMap(x -> Optional.of(ischekc+"123")).get());
     }
 }
