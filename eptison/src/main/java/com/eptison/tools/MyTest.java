@@ -1,6 +1,9 @@
 package com.eptison.tools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.collections4.CollectionUtils;
@@ -15,7 +18,7 @@ import org.apache.commons.collections4.CollectionUtils;
 public class MyTest {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 
 //        String startTime = "2024-01-01";
 //        String endTime = "2024-02-29";
@@ -36,20 +39,31 @@ public class MyTest {
 //            //localDate转换为字符串
 //            System.out.println(localDateTime.format(dateTimeFormatter));
 //        }
-        List<String> classList=new ArrayList<>();
-        AtomicInteger a= new AtomicInteger(10);
-//        classList.add("11");
-        AtomicInteger result=EpOptionalUtils.isTrue(CollectionUtils.isEmpty(classList)).map(x->{
-            a.set(1);
-            System.out.println("11");
-            return a;
-        }).orElseGet(()->{
-            a.set(2);
-            System.out.println("22");
-            return a;
-        });
-        System.out.println(result.get());
-        System.out.println("111222");
+//        List<String> classList=new ArrayList<>();
+//        AtomicInteger a= new AtomicInteger(10);
+////        classList.add("11");
+//        AtomicInteger result=EpOptionalUtils.isTrue(CollectionUtils.isEmpty(classList)).map(x->{
+//            a.set(1);
+//            System.out.println("11");
+//            return a;
+//        }).orElseGet(()->{
+//            a.set(2);
+//            System.out.println("22");
+//            return a;
+//        });
+//        System.out.println(result.get());
+//        System.out.println("111222");
+        String date1Str="2024-03-13";
+        String date2Str="2024-03-20";
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        Date date1=dateFormat.parse(date1Str);
+        Date date2=dateFormat.parse(date2Str);
+
+        int compareResult=date1.compareTo(date2);
+        System.out.println(compareResult);
+
+
+
     }
 
 }
