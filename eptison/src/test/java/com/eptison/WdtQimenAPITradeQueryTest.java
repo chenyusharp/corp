@@ -55,7 +55,6 @@ public class WdtQimenAPITradeQueryTest {
         List<StockLockDetail> details = new ArrayList<>();
         details.add(new StockLockDetail("EOP005", "DDH004B160", new BigDecimal(3), 0));
 
-        QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName,);
 
 
 
