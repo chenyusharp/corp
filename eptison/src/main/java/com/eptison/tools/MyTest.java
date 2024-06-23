@@ -1,11 +1,13 @@
 package com.eptison.tools;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -53,16 +55,31 @@ public class MyTest {
 //        });
 //        System.out.println(result.get());
 //        System.out.println("111222");
-        String date1Str="2024-03-13";
-        String date2Str="2024-03-20";
-        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        Date date1=dateFormat.parse(date1Str);
-        Date date2=dateFormat.parse(date2Str);
+//        String date1Str="2024-03-13";
+//        String date2Str="2024-03-20";
+//        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+//        Date date1=dateFormat.parse(date1Str);
+//        Date date2=dateFormat.parse(date2Str);
+//
+//        int compareResult=date1.compareTo(date2);
+//        System.out.println(compareResult);
 
-        int compareResult=date1.compareTo(date2);
-        System.out.println(compareResult);
 
+//        String deliveryNo="CK20240526010-1";
+//        String regExp="^CK[0-9]+-[1-9][0-9]*$";
+//        System.out.print(Pattern.matches(regExp,null));
 
+        BigDecimal a=new BigDecimal("47.63");
+        BigDecimal a1=a.divide(new BigDecimal(3),6,BigDecimal.ROUND_HALF_UP);
+        BigDecimal b=new BigDecimal("31.75");
+        BigDecimal b1=b.divide(new BigDecimal(2),6,BigDecimal.ROUND_HALF_UP);
+        BigDecimal c=new BigDecimal("63.50");
+        BigDecimal c1=c.divide(new BigDecimal(4),6,BigDecimal.ROUND_HALF_UP);
+        BigDecimal d=new BigDecimal("47.62");
+        BigDecimal d1=d.divide(new BigDecimal(3),6,BigDecimal.ROUND_HALF_UP);
+        System.out.printf(a1.multiply(new BigDecimal(3)).add(
+                b1.multiply(new BigDecimal(6))).add(
+                        c1.multiply(new BigDecimal(4))).add(d1.multiply(new BigDecimal(3))).toPlainString());
 
     }
 

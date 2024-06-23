@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.eptison.qimen.EpQimenOmsBaseQO;
 import com.eptison.qimen.QimenApiTools;
 import com.eptison.qimen.WdtClient;
+import com.taobao.api.ApiException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,16 +24,17 @@ import lombok.Data;
 public class WdtQimenAPITradeQueryTest {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ApiException {
 
-//        String apiMethodName = "wdt.vip.api.trade.query";
-//        Map<String, Object> wdtMap = new HashMap<>();
-//        wdtMap.put("tid", "AD202402120030100040086509");
-//        wdtMap.put("page_no", 0);
-//        wdtMap.put("page_size", 100);
-//        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap));
+//        String apiMethodName = "wdt.refund.query";
+        String apiMethodName = "wdt.vip.api.trade.query";
+        Map<String, Object> wdtMap = new HashMap<>();
+        wdtMap.put("tid", "AT202406180002");
+        wdtMap.put("page_no", 0);
+        wdtMap.put("page_size", 100);
+        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap,true));
 
-        String apiMethodName = "shop_stock_rule_query.php";
+//        String apiMethodName = "shop_stock_rule_query.php";
 //        String apiMethodName = "wdt.goods.brand.query";
 //        Map<String, Object> wdtMap = new HashMap<>();
 //        wdtMap.put("start_time", "AD202402120030100040086509");
@@ -59,18 +61,20 @@ public class WdtQimenAPITradeQueryTest {
 
 
         // 测试环境调用
-//        paramMap.put("details", details);
-//
-//        String wdtSid = "apidevnew2";
-//        String nonQimenApiKey = "eptison2-test";
-//        String nonQimenApiSerect = "123456789";
-//        String nonQimenBaseServerUrl = "http://sandbox.wangdian.cn/openapi2/";
-//        WdtClient client = new WdtClient(wdtSid, nonQimenApiKey, nonQimenApiSerect, nonQimenBaseServerUrl);
-//        HashMap<String, String> objectMap = new HashMap<>();
-//        objectMap.put("params", JSON.toJSONString(paramMap));
+        apiMethodName="shop_stock_query.php";
+        String wdtSid = "apidevnew2";
+        String nonQimenApiKey = "eptison2-test";
+        String nonQimenApiSerect = "123456789";
+        String nonQimenBaseServerUrl = "http://sandbox.wangdian.cn/openapi2/";
+        WdtClient client = new WdtClient(wdtSid, nonQimenApiKey, nonQimenApiSerect, nonQimenBaseServerUrl);
+        HashMap<String, String> objectMap = new HashMap<>();
+//        objectMap.put("params", JSON.toJSONString(paramMapFotTest));
 //        String responseTxt = client.execute(apiMethodName, objectMap);
+        EpQimenOmsBaseQO omsBaseQO=new EpQimenOmsBaseQO();
+        omsBaseQO.setStartTime("2024-06-21 13:00:00");
+        omsBaseQO.setEndTime("2024-06-21 14:00:00");
 //        System.out.printf(JSON.parseObject(responseTxt).toJSONString());
-//        System.out.println(QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, baseQO));
+        System.out.println(QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName,omsBaseQO,true));
     }
 
 

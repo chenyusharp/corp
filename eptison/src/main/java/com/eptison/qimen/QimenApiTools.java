@@ -68,6 +68,11 @@ public class QimenApiTools {
 
 
     /**
+     * 旺店通参数
+     */
+    private static final String WDT_PROPS_PRAM = "extendProps";
+
+    /**
      * 例如:2018-12-28 10:00:00
      */
     public static final String DATE_TIME_SECOUND = "yyyy-MM-dd HH:mm:ss";
@@ -80,19 +85,40 @@ public class QimenApiTools {
     private static final String MESSAGE = "message";
 
 
+    /**
+     * 奇门CRM路由网关URL
+     */
+    static final String QIMEN_CRM_ROUTER_SERVER_URL = "http://qimen.api.taobao.com/top/router/qm";
+
+    /**
+     * 奇门ERP-CRM接口名(订单相关)
+     */
+    static final String QIMEN_CRM_METHOD = "taobao.crm.order.detail.get";
+
+
     private static Logger log = LoggerFactory.getLogger(QimenApiTools.class.getSimpleName());
 
-    private static EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> getNonCrmApiRequest(String apiMethod) {
-        DefaultQimenCloudClient client = new DefaultQimenCloudClient(qimenNonCrmRouterServerUrl, apiKey, apiSerect, Constants.FORMAT_JSON);
-        QimenCloudRequest request = new QimenCloudRequest();
-        request.setApiMethodName(apiMethod);
-        request.setTargetAppKey(wdtTargetAppKey);//注意！ 千万不能少了这
-        return new EpPairV2<>(client, request);
+    private static EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> getNonCrmApiRequest(String apiMethod,boolean isTest) {
+        if (!isTest){
+            DefaultQimenCloudClient client = new DefaultQimenCloudClient(qimenNonCrmRouterServerUrl, apiKey, apiSerect, Constants.FORMAT_JSON);
+            QimenCloudRequest request = new QimenCloudRequest();
+            request.setApiMethodName(apiMethod);
+            request.setTargetAppKey(wdtTargetAppKey);//注意！ 千万不能少了这
+            return new EpPairV2<>(client, request);
+        }else {
+            DefaultQimenCloudClient client = new DefaultQimenCloudClient("https://hu3cgwt0tc.api.taobao.com/router/qmtest",
+                    "28792411", "3adb40e15f1d77d4524ea085d6413c2f", Constants.FORMAT_JSON);
+            QimenCloudRequest request = new QimenCloudRequest();
+            request.setApiMethodName(apiMethod);
+            request.setTargetAppKey(wdtTargetAppKey);//注意！ 千万不能少了这
+            return new EpPairV2<>(client, request);
+        }
+
     }
 
 
-    public static QimenCloudResponse getQimenCloudResponse(String apiMethodName, EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair) throws ApiException {
-        reqPair.getRight().addQueryParam("sid", wdtSid);//注意！ 千万不能少了这
+    public static QimenCloudResponse getQimenCloudResponse(String apiMethodName, EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair,boolean isTest) throws ApiException {
+        reqPair.getRight().addQueryParam("sid", isTest ? "apidevnew2" : wdtSid);//注意！ 千万不能少了这
         QimenCloudResponse response;
         long performanceStart = System.currentTimeMillis();
         response = reqPair.getLeft().execute(reqPair.getRight());
@@ -103,8 +129,8 @@ public class QimenApiTools {
         return response;
     }
 
-    public static String excuteNonCrmApiGetResponse(String apiMethodName, Map<String, Object> paramMap) throws ApiException {
-        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName);
+    public static String excuteNonCrmApiGetResponse(String apiMethodName, Map<String, Object> paramMap,boolean isTest) throws ApiException {
+        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName,isTest);
         for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
             if (null != entry.getValue()) {
                 Object value = entry.getValue();
@@ -115,14 +141,14 @@ public class QimenApiTools {
                 reqPair.getRight().addQueryParam(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(value));
             }
         }
-        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair);
+        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair,isTest);
         JSONObject reponseNode = JSON.parseObject(response.getBody());
         return reponseNode.getString(NODE_RESP_NAME);
     }
 
 
-    public static <T> T excuteNonCrmApiGetResponse(String apiMethodName, Object object, Class<T> dtoClass) throws ApiException {
-        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName);
+    public static <T> T excuteNonCrmApiGetResponse(String apiMethodName, Object object, Class<T> dtoClass,boolean isTest) throws ApiException {
+        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName,isTest);
         Map<String, Object> objectMap = BeanMap.create(object);
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             if (null != entry.getValue()) {
@@ -134,28 +160,30 @@ public class QimenApiTools {
                 reqPair.getRight().addQueryParam(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(value));
             }
         }
-        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair);
+        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair,isTest);
         JSONObject reponseNode = JSON.parseObject(response.getBody());
         String string = reponseNode.getString(NODE_RESP_NAME);
         return JSON.parseObject(string, dtoClass);
     }
 
 
-    public <T> List<T> excuteNonQimenApiWithAutoRetry(String apiMethodName, EpQimenOmsBaseQO wdtQO, String dataListNodeName, Class<T> dtoClass) throws IOException {
-        JSONObject reponseNode = this.excuteNonQimenApiGetReponseNode(apiMethodName, wdtQO);
+    public <T> List<T> excuteNonQimenApiWithAutoRetry(String apiMethodName, EpQimenOmsBaseQO wdtQO, String dataListNodeName, Class<T> dtoClass,boolean isTest) throws IOException {
+        JSONObject reponseNode = this.excuteNonQimenApiGetReponseNode(apiMethodName, wdtQO,isTest);
         return JSON.parseArray(reponseNode.getString(dataListNodeName), dtoClass);
     }
 
 
-    public static JSONObject excuteNonQimenApiGetReponseNode(String apiMethodName, EpQimenOmsBaseQO wdtQO) throws IOException {
+    public static JSONObject excuteNonQimenApiGetReponseNode(String apiMethodName, EpQimenOmsBaseQO wdtQO,boolean isTest) throws IOException {
         /**
          *  WdtClient client = new WdtClient("eptison2", "eptison2-ot", "f7d79847b6200327aa3fc5551dc9bde9", "https://api.wangdian.cn/openapi2");
          *   ----对应正式环境
          */
-        wdtSid = "apidevnew2";
-        nonQimenApiKey = "eptison2-test";
-        nonQimenApiSerect = "123456789";
-        nonQimenBaseServerUrl = "http://sandbox.wangdian.cn/openapi2/";
+        if (isTest) {
+            wdtSid = "apidevnew2";
+            nonQimenApiKey = "eptison2-test";
+            nonQimenApiSerect = "123456789";
+            nonQimenBaseServerUrl = "http://sandbox.wangdian.cn/openapi2/";
+        }
         WdtClient client = new WdtClient(wdtSid, nonQimenApiKey, nonQimenApiSerect, nonQimenBaseServerUrl);
         Map<String, Object> objectMap = BeanMap.create(wdtQO);
         Map<String, String> paramMap = new HashMap<>(objectMap.size());
