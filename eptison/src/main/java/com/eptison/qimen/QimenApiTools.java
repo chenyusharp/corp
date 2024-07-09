@@ -13,11 +13,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Date: 2024/2/17
@@ -26,6 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author xiazhenyu
  */
+@Slf4j
 public class QimenApiTools {
 
 
@@ -96,16 +95,14 @@ public class QimenApiTools {
     static final String QIMEN_CRM_METHOD = "taobao.crm.order.detail.get";
 
 
-    private static Logger log = LoggerFactory.getLogger(QimenApiTools.class.getSimpleName());
-
-    private static EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> getNonCrmApiRequest(String apiMethod,boolean isTest) {
-        if (!isTest){
+    private static EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> getNonCrmApiRequest(String apiMethod, boolean isTest) {
+        if (!isTest) {
             DefaultQimenCloudClient client = new DefaultQimenCloudClient(qimenNonCrmRouterServerUrl, apiKey, apiSerect, Constants.FORMAT_JSON);
             QimenCloudRequest request = new QimenCloudRequest();
             request.setApiMethodName(apiMethod);
             request.setTargetAppKey(wdtTargetAppKey);//注意！ 千万不能少了这
             return new EpPairV2<>(client, request);
-        }else {
+        } else {
             DefaultQimenCloudClient client = new DefaultQimenCloudClient("https://hu3cgwt0tc.api.taobao.com/router/qmtest",
                     "28792411", "3adb40e15f1d77d4524ea085d6413c2f", Constants.FORMAT_JSON);
             QimenCloudRequest request = new QimenCloudRequest();
@@ -117,7 +114,7 @@ public class QimenApiTools {
     }
 
 
-    public static QimenCloudResponse getQimenCloudResponse(String apiMethodName, EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair,boolean isTest) throws ApiException {
+    public static QimenCloudResponse getQimenCloudResponse(String apiMethodName, EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair, boolean isTest) throws ApiException {
         reqPair.getRight().addQueryParam("sid", isTest ? "apidevnew2" : wdtSid);//注意！ 千万不能少了这
         QimenCloudResponse response;
         long performanceStart = System.currentTimeMillis();
@@ -129,8 +126,8 @@ public class QimenApiTools {
         return response;
     }
 
-    public static String excuteNonCrmApiGetResponse(String apiMethodName, Map<String, Object> paramMap,boolean isTest) throws ApiException {
-        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName,isTest);
+    public static String excuteNonCrmApiGetResponse(String apiMethodName, Map<String, Object> paramMap, boolean isTest) throws ApiException {
+        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName, isTest);
         for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
             if (null != entry.getValue()) {
                 Object value = entry.getValue();
@@ -141,14 +138,14 @@ public class QimenApiTools {
                 reqPair.getRight().addQueryParam(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(value));
             }
         }
-        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair,isTest);
+        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair, isTest);
         JSONObject reponseNode = JSON.parseObject(response.getBody());
         return reponseNode.getString(NODE_RESP_NAME);
     }
 
 
-    public static <T> T excuteNonCrmApiGetResponse(String apiMethodName, Object object, Class<T> dtoClass,boolean isTest) throws ApiException {
-        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName,isTest);
+    public static <T> T excuteNonCrmApiGetResponse(String apiMethodName, Object object, Class<T> dtoClass, boolean isTest) throws ApiException {
+        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getNonCrmApiRequest(apiMethodName, isTest);
         Map<String, Object> objectMap = BeanMap.create(object);
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             if (null != entry.getValue()) {
@@ -160,20 +157,20 @@ public class QimenApiTools {
                 reqPair.getRight().addQueryParam(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(value));
             }
         }
-        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair,isTest);
+        QimenCloudResponse response = getQimenCloudResponse(apiMethodName, reqPair, isTest);
         JSONObject reponseNode = JSON.parseObject(response.getBody());
         String string = reponseNode.getString(NODE_RESP_NAME);
         return JSON.parseObject(string, dtoClass);
     }
 
 
-    public <T> List<T> excuteNonQimenApiWithAutoRetry(String apiMethodName, EpQimenOmsBaseQO wdtQO, String dataListNodeName, Class<T> dtoClass,boolean isTest) throws IOException {
-        JSONObject reponseNode = this.excuteNonQimenApiGetReponseNode(apiMethodName, wdtQO,isTest);
-        return JSON.parseArray(reponseNode.getString(dataListNodeName), dtoClass);
+    public static String excuteNonQimenApiWithAutoRetry(String apiMethodName, EpQimenOmsBaseQO wdtQO, String dataListNodeName, boolean isTest) throws IOException {
+        JSONObject reponseNode = excuteNonQimenApiGetReponseNode(apiMethodName, wdtQO, isTest);
+        return reponseNode.getString(dataListNodeName);
     }
 
 
-    public static JSONObject excuteNonQimenApiGetReponseNode(String apiMethodName, EpQimenOmsBaseQO wdtQO,boolean isTest) throws IOException {
+    public static JSONObject excuteNonQimenApiGetReponseNode(String apiMethodName, EpQimenOmsBaseQO wdtQO, boolean isTest) throws IOException {
         /**
          *  WdtClient client = new WdtClient("eptison2", "eptison2-ot", "f7d79847b6200327aa3fc5551dc9bde9", "https://api.wangdian.cn/openapi2");
          *   ----对应正式环境
@@ -201,7 +198,6 @@ public class QimenApiTools {
             responseTxt = client.execute(apiMethodName, paramMap);
             log.warn("旺店通标准接口{} 调用耗时 {}ms", apiMethodName, System.currentTimeMillis() - performanceStart);
             reponseNode = JSON.parseObject(responseTxt);
-            log.info("错误信息:{}",reponseNode.toJSONString());
             //系统调用频繁，旺店通1分钟最多60次
             if (WDT_API_ERROR_CODE_BUSY.equals(reponseNode.getString("code"))) {
                 try {
@@ -213,6 +209,7 @@ public class QimenApiTools {
                 //如果OMS查询不到则会 返回code  7200 和7201
                 //这里不希望抛出异常
             } else if (!QIMEN_ERROR_CODE_OK.equals(reponseNode.getString("code")) && !OMS_ERROR_CODE_7200.equals(reponseNode.getString("code")) && !OMS_ERROR_CODE_7201.equals(reponseNode.getString("code"))) {
+                log.error("错误信息:{}", reponseNode.toJSONString());
                 throw new RuntimeException();
             } else {
                 break;
