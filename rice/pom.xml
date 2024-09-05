@@ -107,6 +107,11 @@
             <artifactId>java-diff-utils</artifactId>
             <version>4.12</version>
         </dependency>
+        <dependency>
+            <groupId>de.danielbechler</groupId>
+            <artifactId>java-object-diff</artifactId>
+            <version>0.95</version>
+        </dependency>
 
     </dependencies>
     <properties>

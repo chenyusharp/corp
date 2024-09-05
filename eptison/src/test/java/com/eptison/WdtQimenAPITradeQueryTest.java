@@ -4,13 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.eptison.qimen.EpQimenOmsBaseQO;
 import com.eptison.qimen.QimenApiTools;
 import com.eptison.qimen.WdtClient;
+import com.google.common.collect.Lists;
 import com.taobao.api.ApiException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -32,19 +38,22 @@ public class WdtQimenAPITradeQueryTest {
 //
 //        shopStockQuery();
 
-        stockQuery();
+//        stockQuery();
 
+//        refundQuery();
+
+        //查询货品档案
+        goodsQuery();
     }
 
 
-
-    public static  void testForTradeQuery() throws IOException, ApiException {
+    public static void testForTradeQuery() throws IOException, ApiException {
         String apiMethodName = "wdt.vip.api.trade.query";
         Map<String, Object> wdtMap = new HashMap<>();
         wdtMap.put("tid", "AT202406180002");
         wdtMap.put("page_no", 0);
         wdtMap.put("page_size", 100);
-        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap,true));
+        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
     }
 
     public static void shopStockRuleQuery() throws IOException, ApiException {
@@ -85,21 +94,71 @@ public class WdtQimenAPITradeQueryTest {
 //        objectMap.put("params", JSON.toJSONString(paramMapFotTest));
 //        String responseTxt = client.execute(apiMethodName, objectMap);
         EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
-        omsBaseQO.setStartTime("2024-06-21 13:00:00");
-        omsBaseQO.setEndTime("2024-06-21 14:00:00");
+        omsBaseQO.setStartTime("2024-08-15 04:00:00");
+        omsBaseQO.setEndTime("2024-08-22 04:00:00");
+        omsBaseQO.setPageNo(0);
+        omsBaseQO.setPageSize(30);
 //        System.out.printf(JSON.parseObject(responseTxt).toJSONString());
-        System.out.println(QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, omsBaseQO, true));
+        System.out.println(QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, omsBaseQO, false));
     }
 
 
-    public static  void stockQuery() throws IOException {
+    public static void stockQuery() throws IOException {
         EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
         omsBaseQO.setStartTime("2024-07-09 08:50:05");
         omsBaseQO.setEndTime("2024-07-09 08:50:02");
         omsBaseQO.setPageSize(100);
-        QimenApiTools.excuteNonQimenApiWithAutoRetry("stock_query.php",omsBaseQO,"stocks",false);
+        QimenApiTools.excuteNonQimenApiWithAutoRetry("stock_query.php", omsBaseQO, "stocks", false);
     }
 
+
+    public static void refundQuery() throws IOException, ApiException {
+        ExecutorService threadPool = Executors.newFixedThreadPool(30);
+        for (int i = 0; i < 1; i++) {
+            int finalI = i;
+            threadPool.execute(() -> {
+                String apiMethodName = "wdt.refund.query";
+                Map<String, Object> wdtMap = new HashMap<>();
+                wdtMap.put("start_time", "2024-07-25 08:56:08");
+                wdtMap.put("end_time", "2024-07-25 10:56:08");
+                wdtMap.put("refund_no","WDTTK2407250004");
+                try {
+                    System.out.println("第"+ finalI
+                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
+                } catch (ApiException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        threadPool.shutdown();
+    }
+
+
+
+    public  static  void stockOutQuery() throws IOException {
+
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        omsBaseQO.setStartTime("2024-07-09 08:50:05");
+        omsBaseQO.setEndTime("2024-07-09 08:50:02");
+        omsBaseQO.setStockoutNo("CK240816000015");
+        omsBaseQO.setPageSize(100);
+        QimenApiTools.excuteNonQimenApiWithAutoRetry("stock_query.php", omsBaseQO, "stocks", true);
+
+    }
+
+
+    /**
+     * 查询oms货品档案信息
+     * @throws IOException
+     */
+    public static  void goodsQuery() throws IOException {
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        omsBaseQO.setStartTime("2024-06-04 08:50:05");
+        omsBaseQO.setEndTime("2024-06-05 18:50:02");
+        omsBaseQO.setSpecNo("EDW033Z160");
+        omsBaseQO.setPageSize(100);
+        System.out.println(QimenApiTools.excuteNonQimenApiWithAutoRetry("goods_query.php", omsBaseQO, "goods_list", true));
+    }
 
 
 

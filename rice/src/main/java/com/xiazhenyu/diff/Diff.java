@@ -5,7 +5,10 @@ import com.github.difflib.DiffUtils;
 import com.github.difflib.algorithm.DiffAlgorithmListener;
 import com.github.difflib.patch.AbstractDelta;
 import com.github.difflib.patch.Patch;
+import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiPredicate;
 import lombok.Builder;
 import lombok.Data;
@@ -34,15 +37,15 @@ public class Diff {
                 .age(16)
                 .address("hangzhou")
                 .build();
-        System.out.println(JSON.toJSONString(studentA));
+//        System.out.println(JSON.toJSONString(studentA));
         Student studentB= Student.builder()
                 .name("xiazhenyuqq")
                 .age(16)
                 .address("wuhan")
                 .build();
-        System.out.println(JSON.toJSONString(studentB));
-//        List<DiffRow> rows=generator.generateDiffRows(Arrays.asList("This is a test senctence."),Arrays.asList("This is a test for diffutils."));
-//        System.out.println(rows.get(0).getOldLine());
+//        System.out.println(JSON.toJSONString(studentB));
+        List<DiffRow> rows=generator.generateDiffRows(Arrays.asList("This is a test senctence."),Arrays.asList("This is a test for diffutils."));
+        System.out.println(rows.get(0).getOldLine());
 
         DiffAlgorithmListener diffAlgorithmListener= new DiffAlgorithmListener() {
             @Override
@@ -61,7 +64,7 @@ public class Diff {
 //                System.out.println("save");
             }
         };
-        final Patch<String> diffInline = DiffUtils.diffInline(JSON.toJSONString(studentA), JSON.toJSONString(studentA));
+        final Patch<String> diffInline = DiffUtils.diffInline(JSON.toJSONString(studentA), JSON.toJSONString(studentB));
 //        final Patch<String> stringPatch = DiffUtils.diff(JSON.toJSONString(studentA), JSON.toJSONString(studentB),diffAlgorithmListener);
 //        System.out.println(stringPatch);
 

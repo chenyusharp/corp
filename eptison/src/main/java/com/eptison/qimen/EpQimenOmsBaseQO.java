@@ -37,5 +37,17 @@ public class EpQimenOmsBaseQO {
     private String shopName;
 
 
+    /**
+     * 出库单号
+     */
+    @JSONField(name = "stockout_no")
+    private String stockoutNo;
+
+
+    /**
+     * 商家编码
+     */
+    @JSONField(name = "spec_no")
+    private String specNo;
 
 }
