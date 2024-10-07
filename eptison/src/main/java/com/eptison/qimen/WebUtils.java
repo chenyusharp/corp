@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 网络工具类。
- * 
+ *
  */
 @UtilityClass
 public class WebUtils {
@@ -31,7 +31,7 @@ public class WebUtils {
 
 	/**
 	 * 执行HTTP POST请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 请求参数
 	 * @return 响应字符串
@@ -42,7 +42,7 @@ public class WebUtils {
 
 	/**
 	 * 执行HTTP POST请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 请求参数
 	 * @param charset 字符集，如UTF-8, GBK, GB2312
@@ -53,18 +53,20 @@ public class WebUtils {
 	}
 
 	public static String doPost(String url, Map<String, String> params, String charset, int connectTimeout, int readTimeout, Map<String, String> headerMap) throws IOException {
-		String ctype = "application/x-www-form-urlencoded;charset=" + charset;
-		String query = buildQuery(params, charset);
-		byte[] content = {};
-		if (query != null) {
-			content = query.getBytes(charset);
-		}
-		return internDoPost(url, ctype, content, connectTimeout, readTimeout, headerMap);
-	}
+        String ctype = "application/x-www-form-urlencoded;charset=" + charset;
+        //需要看下，原先的是否支持json的请求类型
+        String jsonType = "application/json;charset=" + charset;
+        String query = buildQuery(params, charset);
+        byte[] content = {};
+        if (query != null) {
+            content = query.getBytes(charset);
+        }
+        return internDoPost(url, ctype, content, connectTimeout, readTimeout, headerMap);
+    }
 
 	/**
 	 * 执行HTTP POST请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param ctype 请求类型
 	 * @param content 请求字节数组
@@ -82,10 +84,10 @@ public class WebUtils {
 			conn = getConnection(new URL(url), METHOD_POST, ctype, headerMap);
 			conn.setConnectTimeout(connectTimeout);
 			conn.setReadTimeout(readTimeout);
-			
+
 			out = conn.getOutputStream();
 			out.write(content);
-			
+
 			rsp = getResponseAsString(conn);
 		} finally {
 			if (out != null) {
@@ -101,7 +103,7 @@ public class WebUtils {
 
 	/**
 	 * 执行带文件上传的HTTP POST请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 文本请求参数
 	 * @param fileParams 文件请求参数
@@ -121,7 +123,7 @@ public class WebUtils {
 
 	/**
 	 * 执行带文件上传的HTTP POST请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 文本请求参数
 	 * @param fileParams 文件请求参数
@@ -214,7 +216,7 @@ public class WebUtils {
 
 	/**
 	 * 执行HTTP GET请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 请求参数
 	 * @return 响应字符串
@@ -225,7 +227,7 @@ public class WebUtils {
 
 	/**
 	 * 执行HTTP GET请求。
-	 * 
+	 *
 	 * @param url 请求地址
 	 * @param params 请求参数
 	 * @param charset 字符集，如UTF-8, GBK, GB2312
@@ -238,7 +240,7 @@ public class WebUtils {
 		try {
 			String ctype = "application/x-www-form-urlencoded;charset=" + charset;
 			String query = buildQuery(params, charset);
-			
+
 			conn = getConnection(buildGetUrl(url, query), METHOD_GET, ctype, null);
 
 			rsp = getResponseAsString(conn);
@@ -390,7 +392,7 @@ public class WebUtils {
 
 	/**
 	 * 使用默认的UTF-8字符集反编码请求参数值。
-	 * 
+	 *
 	 * @param value 参数值
 	 * @return 反编码后的参数值
 	 */
@@ -400,7 +402,7 @@ public class WebUtils {
 
 	/**
 	 * 使用默认的UTF-8字符集编码请求参数值。
-	 * 
+	 *
 	 * @param value 参数值
 	 * @return 编码后的参数值
 	 */
@@ -410,7 +412,7 @@ public class WebUtils {
 
 	/**
 	 * 使用指定的字符集反编码请求参数值。
-	 * 
+	 *
 	 * @param value 参数值
 	 * @param charset 字符集
 	 * @return 反编码后的参数值
@@ -429,7 +431,7 @@ public class WebUtils {
 
 	/**
 	 * 使用指定的字符集编码请求参数值。
-	 * 
+	 *
 	 * @param value 参数值
 	 * @param charset 字符集
 	 * @return 编码后的参数值
@@ -459,7 +461,7 @@ public class WebUtils {
 
 	/**
 	 * 从URL中提取所有的参数。
-	 * 
+	 *
 	 * @param query URL地址
 	 * @return 参数映射
 	 */
