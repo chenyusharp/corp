@@ -2,6 +2,7 @@ package com.eptison.tk;
 
 import com.google.common.base.CaseFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.Data;
 import net.sf.cglib.beans.BeanMap;
@@ -16,26 +17,22 @@ import net.sf.cglib.beans.BeanMap;
 @Data
 public class TkCommonQO {
 
-
-    private String appKey;
-    private String sign;
-    private String timestamp;
-
     private Integer pageOffset;
 
     private Integer pageSize;
 
+    private List<String> platformSpuCodes;
 
-    public static Map convert2LowerUnderScore(TkCommonQO tkCommonQO) {
-        Map<String, Object> objectMap = BeanMap.create(tkCommonQO);
-        Map<String, String> paramMap = new HashMap<>(objectMap.size());
+
+
+    public Map convert2LowerUnderScore() {
+        Map<String, Object> objectMap = BeanMap.create(this);
+        Map<String, Object> paramMap = new HashMap<>(objectMap.size());
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             if (null != entry.getValue()) {
-                paramMap.put(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(entry.getValue()));
+                paramMap.put(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), entry.getValue());
             }
         }
         return paramMap;
     }
-
-
 }

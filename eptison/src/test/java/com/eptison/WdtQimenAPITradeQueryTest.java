@@ -40,20 +40,20 @@ public class WdtQimenAPITradeQueryTest {
 
 //        stockQuery();
 
-//        refundQuery();
+        refundQuery();
 
         //查询货品档案
-        goodsQuery();
+//        goodsQuery();
     }
 
 
     public static void testForTradeQuery() throws IOException, ApiException {
         String apiMethodName = "wdt.vip.api.trade.query";
         Map<String, Object> wdtMap = new HashMap<>();
-        wdtMap.put("tid", "AT202406180002");
+        wdtMap.put("tid", "2293905147874279592");
         wdtMap.put("page_no", 0);
         wdtMap.put("page_size", 100);
-        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
+        System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false));
     }
 
     public static void shopStockRuleQuery() throws IOException, ApiException {
@@ -119,12 +119,12 @@ public class WdtQimenAPITradeQueryTest {
             threadPool.execute(() -> {
                 String apiMethodName = "wdt.refund.query";
                 Map<String, Object> wdtMap = new HashMap<>();
-                wdtMap.put("start_time", "2024-07-25 08:56:08");
-                wdtMap.put("end_time", "2024-07-25 10:56:08");
-                wdtMap.put("refund_no","WDTTK2407250004");
+//                wdtMap.put("start_time", "2024-09-18 08:56:08");
+//                wdtMap.put("end_time", "2024-09-20 10:56:08");
+                wdtMap.put("tid","2293905147874279592");
                 try {
                     System.out.println("第"+ finalI
-                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
+                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false));
                 } catch (ApiException e) {
                     throw new RuntimeException(e);
                 }

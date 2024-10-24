@@ -19,28 +19,17 @@ import okio.Buffer;
  * @author xiazhenyu
  */
 public class Signature {
-    public String generateSignature(Request request, String secret) {
-        HttpUrl httpUrl = request.url();
+
+    public static String generateSignature(HttpUrl httpUrl, String contentType, String secret,RequestBody requestBody) {
         List<String> parameterNameList = new ArrayList<>(httpUrl.queryParameterNames());
-
-        // extract all query parameters excluding sign and access_token
         parameterNameList.removeIf(param -> "sign".equals(param) || "access_token".equals(param));
-
-        // reorder the parameters' key in alphabetical order
         Collections.sort(parameterNameList);
-
-        // append the request path
         StringBuilder parameterStr = new StringBuilder(httpUrl.encodedPath());
         for (String parameterName : parameterNameList) {
-            // Concatenate all the parameters in the format of {key}{value}
             parameterStr.append(parameterName).append(httpUrl.queryParameter(parameterName));
         }
-
-        // if the request header Content-type is not multipart/form-data, append body to the end
-        String contentType = request.header("Content-Type");
         if (!"multipart/form-data".equalsIgnoreCase(contentType)) {
             try {
-                RequestBody requestBody = request.body();
                 if (requestBody != null) {
                     Buffer bodyBuffer = new Buffer();
                     requestBody.writeTo(bodyBuffer);
@@ -64,7 +53,7 @@ public class Signature {
      * @param signatureParams signature params
      * @return signature
      */
-    public String generateSHA256(String signatureParams, String secret) {
+    public static String generateSHA256(String signatureParams, String secret) {
         try {
             // Get an HmacSHA256 Mac instance and initialize with the secret key
             Mac sha256HMAC = Mac.getInstance("HmacSHA256");
