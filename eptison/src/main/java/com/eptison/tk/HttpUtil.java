@@ -2,6 +2,8 @@ package com.eptison.tk;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.eptison.bojun.BojunAPIResponseCommonDTO;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;

@@ -17,11 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 public class AccessToken {
 
 
+    public static void main(String[] args) throws IOException {
+        System.out.println(getAccessToken());
+    }
     public static String getAccessToken() throws IOException {
         String app_key = "6dt816a6ht3te";
         String app_secret = "a27308a84d7c3b1f9edcca43bde8a54e4b7b3106";
         //需要验证获取
-        String auth_code = "ROW_61Z8kgAAAAAaFCcv4Y4SR_5UIaPo8_H8YuTUc8hsMGwG9qCWyM-12ybZgUjdm2Q0uigGkqPjGHh1hikonTSPwx01tzKJg3cK";
+        String auth_code = "ROW_mPZJYQAAAAAaFCcv4Y4SR_5UIaPo8_H88milKFEFs-N4tublxfF4cEIElqjHyq-jTgdEGi6QQdcIoKo8QLv1877WFnSMDfHq";
         //
         String grant_type = "authorized_code";
 

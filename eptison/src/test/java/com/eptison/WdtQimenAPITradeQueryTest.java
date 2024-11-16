@@ -121,10 +121,10 @@ public class WdtQimenAPITradeQueryTest {
                 Map<String, Object> wdtMap = new HashMap<>();
 //                wdtMap.put("start_time", "2024-09-18 08:56:08");
 //                wdtMap.put("end_time", "2024-09-20 10:56:08");
-                wdtMap.put("tid","2293905147874279592");
+                wdtMap.put("tid","AT202411080003");
                 try {
                     System.out.println("第"+ finalI
-                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false));
+                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
                 } catch (ApiException e) {
                     throw new RuntimeException(e);
                 }
