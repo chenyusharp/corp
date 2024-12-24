@@ -1,7 +1,10 @@
 package com.eptison;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eptison.qimen.EpQimenOmsBaseQO;
+import com.eptison.qimen.EpQimenOmsBaseQO.GoodsInfo;
+import com.eptison.qimen.EpQimenOmsBaseQO.GoodsSpec;
+import com.eptison.qimen.EpQimenOmsBaseQO.StockSyncAck;
 import com.eptison.qimen.QimenApiTools;
 import com.eptison.qimen.WdtClient;
 import com.google.common.collect.Lists;
@@ -10,15 +13,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import net.sf.cglib.beans.BeanMap;
 
 /**
  * Date: 2024/2/17
@@ -40,10 +41,22 @@ public class WdtQimenAPITradeQueryTest {
 
 //        stockQuery();
 
-        refundQuery();
+//        refundQuery();
 
         //查询货品档案
 //        goodsQuery();
+
+        //创建平台货品
+//        createApiGoodsSpec();
+
+        //查询平台货品
+//        apiGoodsChangeQuery();
+
+        //同步平台货品回写
+//        apiStockChangeAck();
+
+        //查询原始退款单
+        vipApiRefundQuery();
     }
 
 
@@ -66,7 +79,7 @@ public class WdtQimenAPITradeQueryTest {
 //        wdtMap.put("page_size", 100);
 //        wdtMap.put("status",1);
         EpQimenOmsBaseQO baseQO = new EpQimenOmsBaseQO();
-        baseQO.setPageSize(5);
+//        baseQO.setPageSize(5);
         baseQO.setStartTime("2024-05-15 00:00:00");
         baseQO.setEndTime("2024-05-15 13:00:00");
 //        baseQO.setShopName("CHiC PARK天猫旗舰店（奇刻）-CHiC PARK");
@@ -78,7 +91,7 @@ public class WdtQimenAPITradeQueryTest {
         paramMap.put("release_reserved_stock", "3");
 
         List<StockLockDetail> details = new ArrayList<>();
-        details.add(new StockLockDetail("EOP005", "DDH004B160", new BigDecimal(3), 0));
+//        details.add(new StockLockDetail("EOP005", "DDH004B160", new BigDecimal(3), 0));
     }
 
 
@@ -121,10 +134,9 @@ public class WdtQimenAPITradeQueryTest {
                 Map<String, Object> wdtMap = new HashMap<>();
 //                wdtMap.put("start_time", "2024-09-18 08:56:08");
 //                wdtMap.put("end_time", "2024-09-20 10:56:08");
-                wdtMap.put("tid","AT202411080003");
+                wdtMap.put("tid", "2370917390775197377");
                 try {
-                    System.out.println("第"+ finalI
-                            +"个线程执行结果："+QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true));
+                    System.out.println("第" + finalI + "个线程执行结果：" + QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false));
                 } catch (ApiException e) {
                     throw new RuntimeException(e);
                 }
@@ -134,8 +146,65 @@ public class WdtQimenAPITradeQueryTest {
     }
 
 
+    public static void vipApiRefundQuery() throws ApiException {
+        String apiMethodName = "wdt.vip.api.refund.query";
+        Map<String, Object> wdtMap = new HashMap<>();
+//        wdtMap.put("start_time", "2024-12-01 17:01:03");
+//        wdtMap.put("end_time", "2024-12-06 17:01:03");
+//        wdtMap.put("tid", "XS20210528013.B");
+//        wdtMap.put("refund_no", "XS20210528005.B");
+        wdtMap.put("refund_no","B2BTH2021012800041");
+        String qimenResponse = QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, true);
+        System.out.println(qimenResponse);
+    }
 
-    public  static  void stockOutQuery() throws IOException {
+
+    public static void createApiGoodsSpec() throws IOException, ApiException {
+        String apiMethodName = "api_goodsspec_push.php";
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setPlatformId(127);
+        goodsInfo.setShopNo("eptison2-test");
+
+        GoodsSpec goodsSpec = new GoodsSpec();
+        goodsSpec.setGoodsId("1144095");
+        goodsSpec.setSpecId("3327448");
+        goodsSpec.setGoodsNo("EDE011");
+        goodsSpec.setSpecNo("EDE011B175");
+        goodsSpec.setStatus(1);
+        goodsInfo.setGoodsSpecList(Lists.newArrayList(goodsSpec));
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        omsBaseQO.setApiGoodsInfo(goodsInfo);
+        Map<String, Object> objectMap = BeanMap.create(omsBaseQO);
+        String response = QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, objectMap, true);
+        System.out.println(response);
+    }
+
+
+    public static void apiGoodsChangeQuery() throws IOException {
+        String apiMethodName = "api_goods_stock_change_query.php";
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        omsBaseQO.setShopNo("20241113001");
+        omsBaseQO.setLimit(100);
+        JSONObject jsonObject = QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, omsBaseQO, false);
+        System.out.println(jsonObject);
+    }
+
+
+    public static void apiStockChangeAck() throws IOException {
+        String apiMethodName = "api_goods_stock_change_ack.php";
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        List<StockSyncAck> stockSyncAckList = new ArrayList<>();
+        StockSyncAck stockSyncAck = new StockSyncAck();
+        stockSyncAck.setRecId(44079596L);
+        stockSyncAck.setSyncStock(14);
+        stockSyncAck.setStockChangeCount(14);
+        stockSyncAckList.add(stockSyncAck);
+        omsBaseQO.setStockSyncList(stockSyncAckList);
+        JSONObject jsonObject = QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, omsBaseQO, true);
+        System.out.println(jsonObject);
+    }
+
+    public static void stockOutQuery() throws IOException {
 
         EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
         omsBaseQO.setStartTime("2024-07-09 08:50:05");
@@ -151,7 +220,7 @@ public class WdtQimenAPITradeQueryTest {
      * 查询oms货品档案信息
      * @throws IOException
      */
-    public static  void goodsQuery() throws IOException {
+    public static void goodsQuery() throws IOException {
         EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
         omsBaseQO.setStartTime("2024-06-04 08:50:05");
         omsBaseQO.setEndTime("2024-06-05 18:50:02");
@@ -159,7 +228,6 @@ public class WdtQimenAPITradeQueryTest {
         omsBaseQO.setPageSize(100);
         System.out.println(QimenApiTools.excuteNonQimenApiWithAutoRetry("goods_query.php", omsBaseQO, "goods_list", true));
     }
-
 
 
     @Data

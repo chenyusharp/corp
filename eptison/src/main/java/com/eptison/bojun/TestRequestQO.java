@@ -101,9 +101,9 @@ public class TestRequestQO {
 
         ProductQO productQO = new ProductQO();
 //        productQO.setSupplierCode("TXDY");
-//        productQO.setGoodsNo("DQXZB");
-        productQO.setColorList(Lists.newArrayList("方形领黑色","蓝黑色","三角领黑色","骷哒古哒黑","钢琴黑","牛仔黑","黑黑黑#","活性黑","黑亮色","波若诺啦黑","克黑","特黑","布啦啦叽黑","花黑色","黑白色","黑暗色","特黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑色","酷小黑","精灵黑","圆领特黑","黑底波点","黑兰色","黑红色","黑绿","黑绿色","星空黑","高牢度黑","黑白波点","黑色、肤色","暗夜黑","花卡其1","酷酷的黑","冰曜黑","黑底烫金","中领特黑","黑色","黑底白点","牛仔黑色","黑黑黑","纯调黑白","炭黑色","萌狗黑","彩虹黑","橘猫黑","黑底烫银","巴黎黑","爱心黑","甜筒黑","缤纷绮黑",
-                "银河黑","一字领黑色","灰卡其","蓝灰色","青灰色","米灰色","绿灰色","花灰色","灰深灰吊染","烟灰色","深灰","麻灰色","浅灰","灰咖","灰白双面","炭灰色","浅麻灰","灰白色","高级灰","冰雾灰","猫咪灰","星空灰","烟熏灰","圆领石灰","黑灰色","V领石灰","深灰色","中领石灰","中灰色","灰紫色","灰紫","青绿灰","土灰色","浅灰色","橡皮灰","暗花灰","岩石灰","灰咖色","灰色格","灰色渐变","灰杏色","银灰色","稻灰色","深灰蓝色","浅褐灰","深花灰","蓝灰","一字领高级灰","方形领高级灰","三角领高级灰","冰灰"));
+        productQO.setGoodsNo("BMQT001");
+//        productQO.setColorList(Lists.newArrayList("方形领黑色","蓝黑色","三角领黑色","骷哒古哒黑","钢琴黑","牛仔黑","黑黑黑#","活性黑","黑亮色","波若诺啦黑","克黑","特黑","布啦啦叽黑","花黑色","黑白色","黑暗色","特黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑黑色","酷小黑","精灵黑","圆领特黑","黑底波点","黑兰色","黑红色","黑绿","黑绿色","星空黑","高牢度黑","黑白波点","黑色、肤色","暗夜黑","花卡其1","酷酷的黑","冰曜黑","黑底烫金","中领特黑","黑色","黑底白点","牛仔黑色","黑黑黑","纯调黑白","炭黑色","萌狗黑","彩虹黑","橘猫黑","黑底烫银","巴黎黑","爱心黑","甜筒黑","缤纷绮黑",
+//                "银河黑","一字领黑色","灰卡其","蓝灰色","青灰色","米灰色","绿灰色","花灰色","灰深灰吊染","烟灰色","深灰","麻灰色","浅灰","灰咖","灰白双面","炭灰色","浅麻灰","灰白色","高级灰","冰雾灰","猫咪灰","星空灰","烟熏灰","圆领石灰","黑灰色","V领石灰","深灰色","中领石灰","中灰色","灰紫色","灰紫","青绿灰","土灰色","浅灰色","橡皮灰","暗花灰","岩石灰","灰咖色","灰色格","灰色渐变","灰杏色","银灰色","稻灰色","深灰蓝色","浅褐灰","深花灰","蓝灰","一字领高级灰","方形领高级灰","三角领高级灰","冰灰"));
         productQO.setPageQuery(false);
         List<ProductQO.BojunAPIQueryOrderBy> orderBys = new ArrayList<>();
 //        orderBys.add(new ProductQO.BojunAPIQueryOrderBy(true,"ID"));
@@ -229,10 +229,10 @@ public class TestRequestQO {
         log.info("bojunAPICommonRequestQO:{}", JSON.toJSONString(bojunAPICommonRequestQO));
         //调用接口进行查询
 
-        String static_query_url = "http://bjpostest.yptcgroup.com:7001/servlets/binserv/Rest";
-        String sip_appkey = "17367076217";
+        String static_query_url = "http://pos.yptcgroup.com:7001/servlets/binserv/Rest";
+        String sip_appkey = "it@eptison.com";
         String sip_timestamp = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()).format(dateTimeMicroSecondFormatter);
-        String sip_password = "abcd2010300489";
+        String sip_password = "eptison123";
         //先根据md5算法计算出对应的sip_secrect的md5值
         String sip_secrect = Md5Util.getMd5(sip_password);
         //sip_appkey+sip_timestamp+appSecret进行MD5哈希运算，结果为32位长字符串，全部小写

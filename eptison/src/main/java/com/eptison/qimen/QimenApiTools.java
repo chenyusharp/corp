@@ -186,13 +186,15 @@ public class QimenApiTools {
         Map<String, String> paramMap = new HashMap<>(objectMap.size());
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             if (null != entry.getValue()) {
-                paramMap.put(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), String.valueOf(entry.getValue()));
+                String value = entry.getValue() instanceof String ? (String) entry.getValue() : JSON.toJSONString(entry.getValue());
+                paramMap.put(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()), value);
             }
         }
         String responseTxt;
 
         JSONObject reponseNode = new JSONObject();
         Integer outLimitRetryCounter = 0;
+        log.info("paramMap:{}",paramMap);
         for (; outLimitRetryCounter < outLimitRetryMax; outLimitRetryCounter++) {
             long performanceStart = System.currentTimeMillis();
             responseTxt = client.execute(apiMethodName, paramMap);

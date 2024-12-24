@@ -1,5 +1,6 @@
 package com.eptison.tk;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.CaseFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,13 @@ public class TkCommonQO {
 
     private List<String> platformSpuCodes;
 
+
+    @JSONField(name = "skus")
+    private List<StockUpdateDTO> skus;
+
+
+    @JSONField(name = "skus")
+    private List<String> skuCode;
 
 
     public Map convert2LowerUnderScore() {

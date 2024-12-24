@@ -24,7 +24,6 @@
         <module>land</module>
         <module>sso</module>
         <module>sso-framework</module>
-        <module>exce2pdfnew</module>
         <module>ostrich/graphql</module>
         <module>eptison</module>
         <module>oplog</module>

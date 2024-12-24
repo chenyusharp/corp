@@ -54,10 +54,11 @@ public class HttpUtil {
     private static final String DEFAULT_CHARSET = "utf-8";
 
 
-    private static final String app_key = "6cnctergfpv4c";
-    private static final String app_secret = "8957fd508cd86883b48e92ab7412ef147e743369";
+    private static final String app_key = AccessToken.testAuthPairMap.get(AccessToken.APP_KEY);
+    private static final String app_secret = AccessToken.testAuthPairMap.get(AccessToken.APP_SECRET);
     //上一步获取accessToken的接口会返回这个值
-    String refresh_token = "ROW_DTIIkwAAAABulNVucoe3BblXMR_CQ9MvhTx4HNUoJ9EMa-TVIuhf4OSELNyK5Fq8F5AMWkuCFvc";
+//    String refresh_token = "ROW_DTIIkwAAAABulNVucoe3BblXMR_CQ9MvhTx4HNUoJ9EMa-TVIuhf4OSELNyK5Fq8F5AMWkuCFvc";
+
 
     private OkHttpClient getInstance() {
         if (!SIGNAL) {
@@ -169,8 +170,9 @@ public class HttpUtil {
         url = buildGetUrl(url, buildQuery(commonAPIQueryParam, DEFAULT_CHARSET));
         MediaType requestMediaType = MediaType.parse(Objects.isNull(mediaType) ? DEFAULT_MEDIA_TYPE : mediaType);
         HttpUrl httpUrl = HttpUrl.get(url);
-        String jsonRequestParam = JSONObject.toJSONString(tkCommonQO.convert2LowerUnderScore());
+        String jsonRequestParam = JSONObject.toJSONString(tkCommonQO);
         final RequestBody requestBody = RequestBody.create(requestMediaType, jsonRequestParam);
+        log.info("request body:{}",requestBody);
         //获取签名
         String signature = Signature.generateSignature(httpUrl, requestMediaType.toString(), app_secret, requestBody);
         url = url + "&sign=" + signature;

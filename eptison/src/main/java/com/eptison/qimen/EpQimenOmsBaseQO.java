@@ -1,6 +1,7 @@
 package com.eptison.qimen;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -25,7 +26,6 @@ public class EpQimenOmsBaseQO {
     private int pageSize = 10;
 
 
-
     @JSONField(name = "end_time")
     private String endTime;
 
@@ -35,6 +35,14 @@ public class EpQimenOmsBaseQO {
 
     @JSONField(name = "shop_name")
     private String shopName;
+
+
+    @JSONField(name = "shop_no")
+    private String shopNo;
+
+
+    @JSONField(name = "limit")
+    private Integer limit;
 
 
     /**
@@ -49,5 +57,62 @@ public class EpQimenOmsBaseQO {
      */
     @JSONField(name = "spec_no")
     private String specNo;
+
+
+    @JSONField(name = "api_goods_info")
+    private GoodsInfo apiGoodsInfo;
+
+
+    @JSONField(name = "stock_sync_list")
+    private List<StockSyncAck> stockSyncList;
+
+    @Data
+    public static class GoodsInfo {
+
+        @JSONField(name = "platform_id")
+        private Integer platformId;
+
+        @JSONField(name = "shop_no")
+        private String shopNo;
+
+        @JSONField(name = "goods_list")
+        private List<GoodsSpec> goodsSpecList;
+
+    }
+
+    @Data
+    public static class GoodsSpec {
+
+
+        @JSONField(format = "goods_id")
+        private String goodsId;
+
+        @JSONField(format = "spec_id")
+        private String specId;
+
+        @JSONField(format = "goods_no")
+        private String goodsNo;
+
+        @JSONField(format = "spec_no")
+        private String specNo;
+
+        @JSONField(format = "status")
+        private Integer status = 1;
+    }
+
+
+    @Data
+    public static class StockSyncAck {
+
+        @JSONField(name = "rec_id")
+        private Long recId;
+
+        @JSONField(name = "sync_stock")
+        private Integer syncStock;
+
+        @JSONField(name = "stock_change_count")
+        private Integer stockChangeCount;
+
+    }
 
 }
