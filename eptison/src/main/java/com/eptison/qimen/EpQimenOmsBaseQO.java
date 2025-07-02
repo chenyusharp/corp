@@ -66,6 +66,11 @@ public class EpQimenOmsBaseQO {
     @JSONField(name = "stock_sync_list")
     private List<StockSyncAck> stockSyncList;
 
+
+
+    @JSONField(name = "warehouse_no")
+    private String warehouseNo;
+
     @Data
     public static class GoodsInfo {
 

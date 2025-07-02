@@ -1,6 +1,7 @@
 package com.eptison.qimen;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eptison.tools.EpPairV2;
 import com.google.common.base.CaseFormat;
@@ -11,8 +12,10 @@ import com.taobao.api.ApiException;
 import com.taobao.api.Constants;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
@@ -223,4 +226,67 @@ public class QimenApiTools {
         return reponseNode;
     }
 
+    public static  List<JSONObject> excuteCrmApiWithAutoRetry(EpQimenOmsBaseQO wdtQO) throws ApiException {
+
+        JSONObject reponseNode = excuteCrmApiGetReponseNode(wdtQO);
+        System.out.println("reponseNode:" + reponseNode.toJSONString());
+        JSONArray jsonArray = reponseNode.getJSONObject(NODE_RESP_NAME).getJSONObject("data")
+                .getJSONArray("orderListGet");
+//        System.out.println("jsonArray" + jsonArray.toJSONString());
+        List<JSONObject> retList = new ArrayList<>(jsonArray.size());
+        for (Object obj : jsonArray) {
+            JSONObject jsonObject = (JSONObject) obj;
+//            T retObj = JSON.parseObject(jsonObject.getString(WDT_PROPS_PRAM), dtoClass);
+            retList.add(jsonObject);
+        }
+        return retList;
+    }
+
+    private static JSONObject excuteCrmApiGetReponseNode(EpQimenOmsBaseQO wdtQO) throws ApiException {
+        EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> reqPair = getCrmRequest();
+        wdtQO.setSid(wdtSid); //必传参数
+        reqPair.getRight().addQueryParam(WDT_PROPS_PRAM, JSON.toJSONString(wdtQO));
+        QimenCloudResponse response;
+        JSONObject reponseNode = new JSONObject();
+        Integer outLimitRetryCounter = 0;
+        for (; outLimitRetryCounter < outLimitRetryMax; outLimitRetryCounter++) {
+            long performanceStart = System.currentTimeMillis();
+            response = reqPair.getLeft().execute(reqPair.getRight(), "6101b157115e5b6895d3fbc15303a6f909c713271520983360260087");
+            log.warn("奇门CRM接口{} 调用耗时 {}ms",
+                    JSON.parseObject(JSON.toJSONString(wdtQO)).get("wdt_interface"), System.currentTimeMillis() - performanceStart);
+            reponseNode = JSON.parseObject(response.getBody());
+            //系统调用频繁，旺店通1分钟最多60次
+            if (WDT_API_ERROR_CODE_BUSY.equals(response.getSubCode())) {
+                try {
+                    Thread.sleep(outLimitWaitTimeGap);
+                } catch (Exception e) {
+                    //do nothing
+                }
+            } else if (!QIMEN_ERROR_CODE_OK.equals(response.getErrorCode())) {
+                throw new RuntimeException();
+            } else break;
+        }
+        if (outLimitRetryCounter == outLimitRetryMax) {
+            throw new RuntimeException();
+        }
+        return reponseNode;
+    }
+
+    private static EpPairV2<DefaultQimenCloudClient, QimenCloudRequest> getCrmRequest() {
+        DefaultQimenCloudClient client =
+                new DefaultQimenCloudClient(QIMEN_CRM_ROUTER_SERVER_URL, apiKey, apiSerect, Constants.FORMAT_JSON);
+        client.setConnectTimeout(30000);
+        client.setReadTimeout(180000);
+        QimenCloudRequest request = new QimenCloudRequest();
+        request.setApiMethodName(QIMEN_CRM_METHOD);
+        //注意！ 千万不能少了这一步
+        request.setTargetAppKey(wdtTargetAppKey);
+        request.addQueryParam("startModified", "2015-01-01 00:00:00");
+        request.addQueryParam("endModified", "2099-12-31 00:00:00");
+        request.addQueryParam("fields", WDT_PROPS_PRAM);
+        request.addQueryParam("pageSize", "100");
+        request.addQueryParam("pageNo", "1");
+        request.addQueryParam("customerid", "eptison2020");
+        return new EpPairV2<>(client, request);
+    }
 }

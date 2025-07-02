@@ -6,11 +6,14 @@ import com.eptison.qimen.EpQimenOmsBaseQO.GoodsInfo;
 import com.eptison.qimen.EpQimenOmsBaseQO.GoodsSpec;
 import com.eptison.qimen.EpQimenOmsBaseQO.StockSyncAck;
 import com.eptison.qimen.QimenApiTools;
+import com.eptison.qimen.QimenOmsApiTradeQO;
+import com.eptison.qimen.QimenOmsStockoutOrderQO;
 import com.eptison.qimen.WdtClient;
 import com.google.common.collect.Lists;
 import com.taobao.api.ApiException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +36,7 @@ public class WdtQimenAPITradeQueryTest {
 
     public static void main(String[] args) throws IOException, ApiException {
 
-//        testForTradeQuery();
+        testForTradeQuery();
 //
 //        shopStockRuleQuery();
 //
@@ -56,18 +59,45 @@ public class WdtQimenAPITradeQueryTest {
 //        apiStockChangeAck();
 
         //查询原始退款单
-        vipApiRefundQuery();
+//        vipApiRefundQuery();
+
+        //原始订单
+//        testForCrmApiTradeQuery();
+
+        //查询oms非销售出库单
+//        queryUnSalesStockoutOrder();
+
+        //查询销售出库单
+//        querySalesStockoutOrder();
+
+        //库存详情查询接口
+//        stockDetailQuery();
     }
 
 
     public static void testForTradeQuery() throws IOException, ApiException {
         String apiMethodName = "wdt.vip.api.trade.query";
         Map<String, Object> wdtMap = new HashMap<>();
-        wdtMap.put("tid", "2293905147874279592");
+        wdtMap.put("tid", "2517177937205381352");
         wdtMap.put("page_no", 0);
         wdtMap.put("page_size", 100);
         System.out.println(QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false));
     }
+
+
+
+    public static void testForCrmApiTradeQuery() throws IOException, ApiException {
+
+        QimenOmsApiTradeQO queryQO=new QimenOmsApiTradeQO();
+        queryQO.setPageNo(5);
+        queryQO.setPageSize(100);
+        queryQO.setWdtInterface("trade_order");
+//        queryQO.setTid("250118-153815641651903");
+        queryQO.setStartTime("2025-01-18 21:40:00");
+        queryQO.setEndTime("2025-01-18 21:50:44");
+        QimenApiTools.excuteCrmApiWithAutoRetry(queryQO);
+    }
+
 
     public static void shopStockRuleQuery() throws IOException, ApiException {
         //        String apiMethodName = "shop_stock_rule_query.php";
@@ -213,6 +243,46 @@ public class WdtQimenAPITradeQueryTest {
         omsBaseQO.setPageSize(100);
         QimenApiTools.excuteNonQimenApiWithAutoRetry("stock_query.php", omsBaseQO, "stocks", true);
 
+    }
+
+
+
+    public static void queryUnSalesStockoutOrder() throws ApiException {
+        String apiMethodName = "wdt.stockout.order.query";
+        Map<String, Object> wdtMap = new HashMap<>();
+        wdtMap.put("start_time", "2025-02-04 20:20:37");
+        wdtMap.put("end_time", "2025-02-04 21:40:37");
+//        wdtMap.put("stockout_no", "CK202502047152");
+        wdtMap.put("src_order_no", "JY2025020410840");
+        wdtMap.put("page_no", 0);
+        wdtMap.put("page_size", 100);
+        String qimenResponse = QimenApiTools.excuteNonCrmApiGetResponse(apiMethodName, wdtMap, false);
+        System.out.println(qimenResponse);
+    }
+
+
+    public static void querySalesStockoutOrder() throws ApiException {
+        QimenOmsStockoutOrderQO qo = new QimenOmsStockoutOrderQO();
+        qo.setWdtInterface("stockout");
+        qo.setPageNo(1);
+        qo.setPageSize(100);
+        qo.setStartTime("2025-02-05 13:17:37");
+        qo.setEndTime("2025-02-05 13:23:38");
+        System.out.println(QimenApiTools.excuteCrmApiWithAutoRetry(qo));
+    }
+
+
+
+
+    public  static  void stockDetailQuery() throws IOException {
+        String apiMethodName = "stock_query_detail.php";
+        EpQimenOmsBaseQO omsBaseQO = new EpQimenOmsBaseQO();
+        omsBaseQO.setSpecNo("FDC063Y165");
+        omsBaseQO.setPageNo(0);
+        omsBaseQO.setPageSize(100);
+        omsBaseQO.setWarehouseNo("EPHZC");
+        JSONObject jsonObject = QimenApiTools.excuteNonQimenApiGetReponseNode(apiMethodName, omsBaseQO, false);
+        System.out.println(jsonObject);
     }
 
 

@@ -1,7 +1,6 @@
 package com.xiazhenyu.corn.coreTec.singleton.lazyLoad.dclProve;
 
 import java.util.concurrent.CountDownLatch;
-import org.checkerframework.checker.units.qual.C;
 
 /**
  * Date: 2022/1/3

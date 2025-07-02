@@ -15,7 +15,7 @@ public class Run {
 //        mainForMyThread();
 //        mainForSynchronizedObject();
 //        lockStop();
-        mainForMyObject();
+//        mainForMyObject();
     }
 
 

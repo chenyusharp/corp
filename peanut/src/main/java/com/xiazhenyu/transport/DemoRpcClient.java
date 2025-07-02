@@ -36,7 +36,7 @@ public class DemoRpcClient implements Closeable {
         clientBootstrap.group(group)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
-                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .option(ChannelOption.ALLOCATOR, M.DEFAULT)
                 .channel(NioSctpChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
